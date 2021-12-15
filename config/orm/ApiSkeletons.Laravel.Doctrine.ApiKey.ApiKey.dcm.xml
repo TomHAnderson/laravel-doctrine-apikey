@@ -8,7 +8,6 @@
     <field name="key" type="string" unique="true" nullable="false"/>
     <field name="is_deleted" type="boolean" nullable="false"/>
     <field name="created_at" type="datetime" nullable="false"/>
-    <field name="updated_at" type="datetime" nullable="true"/>
     <field name="deleted_at" type="datetime" nullable="true"/>
     <one-to-many field="accessEvents" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent" mapped-by="apiKey"/>
     <one-to-many field="adminEvents" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent" mapped-by="apiKey"/>

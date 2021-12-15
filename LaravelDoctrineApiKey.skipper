@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <skipper version="3.2.36.1772" mvc="Without MVC" orm="Doctrine2" name="doctrine-apikey" uuid="853f158e-72be-49b9-9f8c-ffef53333777">
-  <module name="\MainBundle" local-name="MainBundle" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey" local-namespace="ApiSkeletons\Laravel\Doctrine\ApiKey" export-format="Doctrine2Xml" export-path="." uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3">
+  <module name="\MainBundle" local-name="MainBundle" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey" local-namespace="ApiSkeletons\Laravel\Doctrine\ApiKey" export-format="Doctrine2Xml" export-path="config/orm" uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3">
     <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey" local-name="ApiKey" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey" uuid="5d41775f-e84c-4890-a202-19c4f93e3b58">
       <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="1425ce9b-57d6-4c28-bd8b-89fffce92468"/>
       <field name="name" type="string" required="true" unique="true" uuid="a0ea0895-aab4-4c93-b119-47c9539e95a2"/>
       <field name="key" type="string" required="true" unique="true" uuid="e5a11137-9889-470a-8d5d-7ce1273d13df"/>
       <field name="is_deleted" type="boolean" required="true" uuid="ba95511b-7e28-47b1-8cd1-eaa9a488dc96"/>
       <field name="created_at" type="datetime" required="true" uuid="d09a3c83-1bd8-45fe-8b2c-9c46b4319c30"/>
-      <field name="updated_at" type="datetime" uuid="73de0227-93b7-4b2f-aef5-5edc9252ef88"/>
       <field name="deleted_at" type="datetime" uuid="49072f5c-bbbd-4e04-85df-656eaffd9025"/>
       <orm-attributes>
         <attribute name="table">api_keys</attribute>
@@ -15,11 +14,10 @@
     </entity>
     <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent" local-name="AccessEvent" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey" uuid="3affb470-569a-4814-9456-e72403fe11d1">
       <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="c5dc4997-b4de-4e4b-a908-5a18449cb408"/>
+      <field name="api_key_id" type="bigint" required="true" uuid="bbf2e1bc-0f62-4e9f-b7ca-2d7e22c183b7"/>
       <field name="ip_address" type="string" required="true" uuid="e2cbaf2c-9780-42d9-9268-fa01aab29a50"/>
       <field name="url" type="text" required="true" uuid="074fa7a8-b6f4-4ad2-be99-5d16c5dddcd2"/>
       <field name="created_at" type="datetime" required="true" uuid="022132ec-5ecb-4888-9baf-437191e44619"/>
-      <field name="updated_at" type="datetime" uuid="cd70a7c2-51d8-46b8-9819-07052e6908c4"/>
-      <field name="api_key_id" type="bigint" required="true" uuid="bbf2e1bc-0f62-4e9f-b7ca-2d7e22c183b7"/>
       <orm-attributes>
         <attribute name="table">api_key_access_events</attribute>
       </orm-attributes>
@@ -29,11 +27,10 @@
     </association>
     <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent" local-name="AdminEvent" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey" uuid="69a65682-1289-49d8-a90b-4354347cb63a">
       <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="f0ee1b16-32ab-41a6-98ec-6d2dfa79fdf4"/>
+      <field name="api_key_id" type="bigint" required="true" uuid="b4a70cfd-ff9e-4a70-91a8-aeb5b9a12e66"/>
       <field name="ip_address" type="string" required="true" uuid="829642e0-c00a-467a-982e-3300f7857a20"/>
       <field name="event" type="string" required="true" uuid="6d0bf317-4cbb-4368-9c8d-1a3d2fa04b50"/>
       <field name="created_at" type="datetime" required="true" uuid="28d27429-0244-4d95-90b9-0a9a4a8a34d9"/>
-      <field name="updated_at" type="datetime" uuid="dce84d07-8b5b-44c5-a511-d5c426cc4b4d"/>
-      <field name="api_key_id" type="bigint" required="true" uuid="b4a70cfd-ff9e-4a70-91a8-aeb5b9a12e66"/>
       <orm-attributes>
         <attribute name="table">api_key_admin_events</attribute>
       </orm-attributes>
@@ -45,7 +42,6 @@
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="83bbd436-c932-4790-ae35-fa8e9fc6b440"/>
       <field name="name" type="string" required="true" unique="true" uuid="3e14cc31-010e-454e-b57a-103b82b8386c"/>
       <field name="created_at" type="datetime" required="true" uuid="d590b2e3-48a9-4a50-831c-f9847aac3d13"/>
-      <field name="updated_at" type="datetime" uuid="fda14dbd-bd92-48bb-971c-35868dd48f06"/>
       <orm-attributes>
         <attribute name="table">api_key_scopes</attribute>
       </orm-attributes>
@@ -87,13 +83,13 @@
     <comment uuid="bf1783ed-22fb-40a8-9fbd-43071bafbd7f" bg-color="#D587FF" position-x="120" position-y="160" size-x="0" size-x2="80" size-y="0" size-y2="20" txt-color="#000000"/>
     <comment uuid="c405b7e9-3ab9-4ffd-8cd4-2c5621b85da4" bg-color="#FFFFE0" position-x="426" position-y="157" size-x="6" size-x2="134" size-y="-3" size-y2="63" txt-color="#000000"/>
     <comment uuid="d5384c1f-e65f-4128-8c4d-860b6a578102" bg-color="#FFFFE0" position-x="399" position-y="20" size-x="9" size-x2="168" size-y="0" size-y2="60" txt-color="#000000"/>
-    <entity uuid="3affb470-569a-4814-9456-e72403fe11d1" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="645" position-y="77" size-x="0" size-x2="112" size-y="0" size-y2="101"/>
-    <entity uuid="5d41775f-e84c-4890-a202-19c4f93e3b58" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="337" position-y="38" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
-    <entity uuid="69a65682-1289-49d8-a90b-4354347cb63a" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="25" position-y="67" size-x="0" size-x2="112" size-y="0" size-y2="101"/>
+    <entity uuid="3affb470-569a-4814-9456-e72403fe11d1" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="645" position-y="45" size-x="0" size-x2="112" size-y="0" size-y2="101"/>
+    <entity uuid="5d41775f-e84c-4890-a202-19c4f93e3b58" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="337" position-y="43" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="69a65682-1289-49d8-a90b-4354347cb63a" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="25" position-y="46" size-x="0" size-x2="112" size-y="0" size-y2="101"/>
     <entity uuid="b9c06238-4131-4393-b380-09fd0e013f59" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="343" position-y="207" size-x="0" size-x2="100" size-y="0" size-y2="60"/>
     <entity uuid="e2fc4483-5bba-4764-81cb-ca00f3a97ee2" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="337" position-y="325" size-x="0" size-x2="112" size-y="0" size-y2="73"/>
     <many-to-many-association uuid="f3287250-6321-4387-b98d-40b7df23f443" color="#969696"/>
-    <module uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3" bg-color="#E1EDF0" position-x="23" position-y="302" size-x="11" size-x2="917" size-y="22" size-y2="432"/>
+    <module uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3" bg-color="#E1EDF0" position-x="23" position-y="302" size-x="11" size-x2="817" size-y="22" size-y2="428"/>
     <module uuid="ccf18b55-8155-4892-9489-ea177a3f2a0d" bg-color="#E8FADF" position-x="10" position-y="20" size-x="0" size-x2="583" size-y="0" size-y2="233"/>
     <project uuid="853f158e-72be-49b9-9f8c-ffef53333777" size-x="10" size-x2="1098" size-y="0" size-y2="810"/>
   </visual-data>

@@ -23,11 +23,6 @@ class AdminEvent
     private $created_at;
 
     /**
-     * @var \DateTime|null
-     */
-    private $updated_at;
-
-    /**
      * @var int
      */
     private $id;
@@ -108,30 +103,6 @@ class AdminEvent
     public function getCreatedAt()
     {
         return $this->created_at;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return AdminEvent
-     */
-    public function setUpdatedAt($updatedAt = null)
-    {
-        $this->updated_at = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
     }
 
     /**

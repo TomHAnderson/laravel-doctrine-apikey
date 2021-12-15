@@ -30,11 +30,6 @@ class ApiKey
     /**
      * @var \DateTime|null
      */
-    private $updated_at;
-
-    /**
-     * @var \DateTime|null
-     */
     private $deleted_at;
 
     /**
@@ -161,30 +156,6 @@ class ApiKey
     public function getCreatedAt()
     {
         return $this->created_at;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTime|null $updatedAt
-     *
-     * @return ApiKey
-     */
-    public function setUpdatedAt($updatedAt = null)
-    {
-        $this->updated_at = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
     }
 
     /**

@@ -7,7 +7,6 @@
     <field name="ip_address" type="string" nullable="false"/>
     <field name="url" type="text" nullable="false"/>
     <field name="created_at" type="datetime" nullable="false"/>
-    <field name="updated_at" type="datetime" nullable="true"/>
     <many-to-one field="apiKey" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey" inversed-by="accessEvents">
       <join-columns>
         <join-column name="api_key_id" referenced-column-name="id" nullable="false"/>

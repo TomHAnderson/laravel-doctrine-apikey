@@ -25,7 +25,6 @@ class ServiceProvider extends LaravelServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Command\CreateApiKey::class,
-                Command\UpdateApiKey::class,
                 Command\DeleteApiKey::class,
                 Command\CreateScope::class,
                 Command\DeleteScope::class,

@@ -6,7 +6,6 @@
     </id>
     <field name="name" type="string" unique="true" nullable="false"/>
     <field name="created_at" type="datetime" nullable="false"/>
-    <field name="updated_at" type="datetime" nullable="true"/>
     <many-to-many field="apiKeys" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey" inversed-by="scopes">
       <join-table name="api_keys_to_scopes">
         <join-columns>
