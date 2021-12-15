@@ -20,5 +20,12 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "ApiSkeletons\\Laravel\\Doctrine\\ApiKey\\ServiceProvider"
+            ]
+        }
     }
 }
