@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="ApiSkeletons\Laravel\Doctrine\ApiKey\Scope" table="api_key_scopes">
+    <id name="id" type="integer">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="name" type="string" unique="true" nullable="false"/>
+    <field name="created_at" type="datetime" nullable="false"/>
+    <field name="updated_at" type="datetime" nullable="true"/>
+    <many-to-many field="apiKeys" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey" inversed-by="scopes">
+      <join-table name="api_keys_to_scopes">
+        <join-columns>
+          <join-column name="scope_id" referenced-column-name="id" nullable="false"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="api_key_id" referenced-column-name="id" nullable="false"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>
