@@ -5,7 +5,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "ApiSkeletons\\Laravel\\Doctrine\\Apikey\\": "src/"
+            "ApiSkeletons\\Laravel\\Doctrine\\ApiKey\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ApiSkeletonsTest\\Laravel\\Doctrine\\ApiKey\\": "test/"
         }
     },
     "authors": [
@@ -19,7 +24,8 @@
         "laravel-doctrine/orm": "^1.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^6.23"
     },
     "extra": {
         "laravel": {

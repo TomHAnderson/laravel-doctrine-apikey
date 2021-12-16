@@ -1,23 +1,22 @@
 <?php
 
-namespace ApiSkeletonsTest\Doctrine\QueryBuilder\Filter;
+namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey;
 
-use ApiSkeletons\Doctrine\QueryBuilder\Filter\Applicator;
-use DateTime;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
-use Exception;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-abstract class TestCase extends PHPUnitTestCase
+abstract class TestCase extends OrchestraTestCase
 {
     protected EntityManager $entityManager;
 
     public function setUp(): void
     {
+        parent::setUp();
+        return;
+
         // Create a simple "default" Doctrine ORM configuration for Annotations
         $isDevMode = true;
         $config = Setup::createXMLMetadataConfiguration(array(__DIR__ . "/../config/orm"), $isDevMode);
@@ -29,7 +28,32 @@ abstract class TestCase extends PHPUnitTestCase
 
         $this->entityManager = EntityManager::create($conn, $config);
         $tool = new SchemaTool($this->entityManager);
-        $res = $tool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+        $tool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
+    }
+
+    protected function getPackageProviders($app)
+    {
+        return [
+            \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+        ];
+    }
+
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['config']['doctrine.managers.default.paths'] = [
+            __DIR__ . '/Entities'
+        ];
+    }
+
+    protected function createDatabase(EntityManager $entityManager): EntityManager
+    {
+        $apiKeyService = app(ApiKeyService::class);
+
+        $apiKeyService->init($entityManager);
+
+        $tool = new SchemaTool($entityManager);
+        $tool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
+
+        return $entityManager;
     }
 }
-

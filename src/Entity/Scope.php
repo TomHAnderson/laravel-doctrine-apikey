@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiSkeletons\Laravel\Doctrine\ApiKey;
+namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Entity;
 
 /**
  * Scope

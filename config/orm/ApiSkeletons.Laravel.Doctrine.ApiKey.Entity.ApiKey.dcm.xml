@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey" table="api_keys" repository-class="ApiSkeletons\Laravel\Doctrine\ApiKey\Repository\ApiKeyRepository">
+    <id name="id" type="bigint">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="name" type="string" unique="true" nullable="false"/>
+    <field name="key" type="string" unique="true" nullable="false"/>
+    <field name="is_deleted" type="boolean" nullable="false"/>
+    <field name="created_at" type="datetime" nullable="false"/>
+    <field name="deleted_at" type="datetime" nullable="true"/>
+    <one-to-many field="accessEvents" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent" mapped-by="apiKey"/>
+    <one-to-many field="adminEvents" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent" mapped-by="apiKey"/>
+    <many-to-many field="scopes" target-entity="ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope" mapped-by="apiKeys"/>
+  </entity>
+</doctrine-mapping>
