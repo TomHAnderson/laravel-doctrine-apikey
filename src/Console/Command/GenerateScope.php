@@ -51,6 +51,7 @@ final class GenerateScope extends Command
 
         try {
             $scope = $scopeRepository->generate($name);
+	    $this->apiKeyService->getEntityManager()->flush();
         } catch (DuplicateName $e) {
             $this->error($e->getMessage());
 
