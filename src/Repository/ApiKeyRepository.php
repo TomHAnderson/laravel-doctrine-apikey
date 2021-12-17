@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Str;
 
 use function preg_match;
+use function request;
 
 class ApiKeyRepository extends EntityRepository
 {
@@ -28,7 +29,7 @@ class ApiKeyRepository extends EntityRepository
             throw new DuplicateName('An API key already exists with the name: ' . $name);
         }
 
-        if (!$this->isValidName($name)) {
+        if (! $this->isValidName($name)) {
             throw new InvalidName('Please provide a valid name: [a-z0-9-]');
         }
 
@@ -45,7 +46,7 @@ class ApiKeyRepository extends EntityRepository
             ->setStatusAt(new DateTime());
 
         $this->getEntityManager()->persist($apiKey);
-        $this->getEntityManager()->persist($this->logAdminEvent($apiKey,'generate'));
+        $this->getEntityManager()->persist($this->logAdminEvent($apiKey, 'generate'));
 
         return $apiKey;
     }
@@ -56,7 +57,7 @@ class ApiKeyRepository extends EntityRepository
             ->setIsActive($status)
             ->setStatusAt(new DateTime());
 
-        $eventName = ($status) ? 'activate': 'deactivate';
+        $eventName = $status ? 'activate' : 'deactivate';
         $this->getEntityManager()->persist($this->logAdminEvent($apiKey, $eventName));
 
         return $apiKey;
@@ -89,7 +90,7 @@ class ApiKeyRepository extends EntityRepository
             }
         }
 
-        if (!$found) {
+        if (! $found) {
             throw new ApiKeyDoesNotHaveScope(
                 'The requested Scope to remove does not exist on the ApiKey'
             );
@@ -105,16 +106,15 @@ class ApiKeyRepository extends EntityRepository
 
     public function isValidName(string $name): bool
     {
-        return (bool)preg_match('/^[a-z0-9-]{1,255}$/', $name);
+        return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
     }
 
-    protected function logAdminEvent(ApiKey $apiKey, string $eventName)
+    protected function logAdminEvent(ApiKey $apiKey, string $eventName): AdminEvent
     {
         return (new AdminEvent())
             ->setIpAddress(request()->ip())
             ->setApiKey($apiKey)
             ->setEvent($eventName)
-            ->setCreatedAt(new DateTime())
-            ;
+            ->setCreatedAt(new DateTime());
     }
 }
