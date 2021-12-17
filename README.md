@@ -151,8 +151,6 @@ public function register(): void
 
 Initialize the ApiKey service for the second entity manager in `App\Providers\AppServiceProvider`
 ```php
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-
 public function boot()
 {
     app('ApiKeyService2')->init(app('em2'));
