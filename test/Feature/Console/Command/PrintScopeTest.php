@@ -5,34 +5,33 @@ namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey\Feature\Console\Command;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
-use DateTime;
 
-final class PrintApiKeyTest extends TestCase
+final class PrintScopeTest extends TestCase
 {
-    public function testPrintApiKey(): void
+    public function testPrintScope(): void
     {
         $entityManager = app('em');
         $this->createDatabase($entityManager);
 
-        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
-        $apiKey = $apiKeyRepository->generate('testing');
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+        $scope = $scopeRepository->generate('testing');
         $entityManager->flush();
 
-        $this->artisan('apikey:print', [
-            'name' => $apiKey->getName(),
+        $this->artisan('apikey:scope:print', [
+            'name' => $scope->getName(),
         ])->assertExitCode(0);
     }
 
-    public function testPrintAllApiKeys(): void
+    public function testPrintAllScopes(): void
     {
         $entityManager = app('em');
         $this->createDatabase($entityManager);
 
-        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
-        $apiKey = $apiKeyRepository->generate('testing');
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+        $scope = $scopeRepository->generate('testing');
         $entityManager->flush();
 
-        $this->artisan('apikey:print', [
+        $this->artisan('apikey:scope:print', [
         ])->assertExitCode(0);
     }
 
@@ -41,11 +40,11 @@ final class PrintApiKeyTest extends TestCase
         $entityManager = app('em');
         $this->createDatabase($entityManager);
 
-        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
-        $apiKey = $apiKeyRepository->generate('testing');
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+        $scope = $scopeRepository->generate('testing');
         $entityManager->flush();
 
-        $this->artisan('apikey:print', [
+        $this->artisan('apikey:scope:print', [
             'name' => 'invalid',
         ])->assertExitCode(1);
     }

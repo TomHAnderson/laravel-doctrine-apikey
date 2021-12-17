@@ -8,15 +8,12 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-use Illuminate\Console\Command;
 
 use function count;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class GenerateScope extends Command
 {
-    private ApiKeyService $apiKeyService;
-
     /**
      * The name and signature of the console command.
      */
@@ -25,19 +22,7 @@ final class GenerateScope extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Generate a new ApiKey Scope';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct(ApiKeyService $apiKeyService)
-    {
-        parent::__construct();
-
-        $this->apiKeyService = $apiKeyService;
-    }
+    protected $description = 'Generate a new apikey scope';
 
     /**
      * Execute the console command.
@@ -62,10 +47,7 @@ final class GenerateScope extends Command
             return 1;
         }
 
-        $headers = ['name', 'apiKey count'];
-        $rows    = [[$scope->getName(), count($scope->getApiKeys())]];
-
-        $this->table($headers, $rows);
+        $this->printScopes([$scope]);
 
         return 0;
     }

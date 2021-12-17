@@ -7,16 +7,12 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-use Illuminate\Console\Command;
 
 use function implode;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class GenerateApiKey extends Command
 {
-    private ApiKeyService $apiKeyService;
-
     /**
      * The name and signature of the console command.
      */
@@ -25,19 +21,7 @@ final class GenerateApiKey extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Create a new ApiKey';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct(ApiKeyService $apiKeyService)
-    {
-        parent::__construct();
-
-        $this->apiKeyService = $apiKeyService;
-    }
+    protected $description = 'Create a new apikey';
 
     /**
      * Execute the console command.
@@ -63,22 +47,7 @@ final class GenerateApiKey extends Command
 
         $this->apiKeyService->getEntityManager()->flush();
 
-        $scopeNames = [];
-        foreach ($apiKey->getScopes() as $s) {
-            $scopeNames[] = $s->getName();
-        }
-
-        $headers = ['name', 'key', 'status', 'scopes'];
-        $rows    = [
-            [
-                $apiKey->getName(),
-                $apiKey->getApiKey(),
-                $apiKey->getIsActive() ? 'active' : 'deactivated',
-                implode(',', $scopeNames),
-            ],
-        ];
-
-        $this->table($headers, $rows);
+        $this->printApiKeys([$apiKey]);
 
         return 0;
     }
