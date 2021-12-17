@@ -7,13 +7,10 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-use Illuminate\Console\Command;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class DeleteScope extends Command
 {
-    private ApiKeyService $apiKeyService;
-
     /**
      * The name and signature of the console command.
      */
@@ -23,18 +20,6 @@ final class DeleteScope extends Command
      * The console command description.
      */
     protected $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct(ApiKeyService $apiKeyService)
-    {
-        parent::__construct();
-
-        $this->apiKeyService = $apiKeyService;
-    }
 
     /**
      * Execute the console command.

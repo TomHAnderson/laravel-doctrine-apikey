@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
-final class PrintApiKey extends Command
+final class PrintScope extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'apikey:print {name?}';
+    protected $signature = 'apikey:scope:print {name?}';
 
     /**
      * The console command description.
      */
-    protected $description = 'Print apikeys';
+    protected $description = 'Print scopes';
 
     /**
      * Execute the console command.
@@ -26,22 +27,22 @@ final class PrintApiKey extends Command
     {
         $name = $this->argument('name');
 
-        $apiKeyRepository = $this->apiKeyService->getEntityManager()
-            ->getRepository(ApiKey::class);
+        $scopeRepository = $this->apiKeyService->getEntityManager()
+            ->getRepository(Scope::class);
 
         if ($name) {
-            $apiKeys = $apiKeyRepository->findBy(['name' => $name]);
+            $scopes = $scopeRepository->findBy(['name' => $name]);
 
-            if (! $apiKeys) {
-                $this->error('Invalid apikey name');
+            if (! $scopes) {
+                $this->error('Invalid scope name');
 
                 return 1;
             }
         } else {
-            $apiKeys = $apiKeyRepository->findAll();
+            $scopes = $scopeRepository->findAll();
         }
 
-        $this->printApiKeys($apiKeys);
+        $this->printScopes($scopes);
 
         return 0;
     }

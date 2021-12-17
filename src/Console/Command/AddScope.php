@@ -8,15 +8,10 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateScopeForApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-use Illuminate\Console\Command;
-
-use function implode;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class AddScope extends Command
 {
-    private ApiKeyService $apiKeyService;
-
     /**
      * The name and signature of the console command.
      */
@@ -26,18 +21,6 @@ final class AddScope extends Command
      * The console command description.
      */
     protected $description = 'Add a Scope to an ApiKey';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct(ApiKeyService $apiKeyService)
-    {
-        parent::__construct();
-
-        $this->apiKeyService = $apiKeyService;
-    }
 
     /**
      * Execute the console command.
@@ -54,7 +37,7 @@ final class AddScope extends Command
 
         $apiKey = $apiKeyRepository->findOneBy(['name' => $apiKeyName]);
         if (! $apiKey) {
-            $this->error('Cannot find ApiKey with name: ' . $apiKeyName);
+            $this->error('Cannot find apikey with name: ' . $apiKeyName);
 
             return 1;
         }
@@ -75,22 +58,7 @@ final class AddScope extends Command
             return 1;
         }
 
-        $scopeNames = [];
-        foreach ($apiKey->getScopes() as $s) {
-            $scopeNames[] = $s->getName();
-        }
-
-        $headers = ['name', 'key', 'status', 'scopes'];
-        $rows    = [
-            [
-                $apiKey->getName(),
-                $apiKey->getApiKey(),
-                $apiKey->getIsActive() ? 'active' : 'deactivated',
-                implode(',', $scopeNames),
-            ],
-        ];
-
-        $this->table($headers, $rows);
+        $this->printApiKeys([$apiKey]);
 
         return 0;
     }
