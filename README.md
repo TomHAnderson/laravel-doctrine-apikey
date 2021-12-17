@@ -135,9 +135,14 @@ Delete a Scope
 php artisan apikey:scope:delete {scopeName}
 ```
 
-Print an ApiKey
+Print ApiKey[s]
 ```shell
-php artisan apikey:print {name} 
+php artisan apikey:print {name?} 
+```
+
+Print Scope[s]
+```shell
+php artisan apikey:scope:print {name?} 
 ```
 
 

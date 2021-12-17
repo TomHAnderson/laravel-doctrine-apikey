@@ -24,18 +24,20 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\Command\ActivateApiKey::class,
-                Console\Command\AddScope::class,
-                Console\Command\DeactivateApiKey::class,
-                Console\Command\DeleteScope::class,
-                Console\Command\GenerateApiKey::class,
-                Console\Command\GenerateScope::class,
-                Console\Command\PrintApiKey::class,
-                Console\Command\PrintScope::class,
-                Console\Command\RemoveScope::class,
-            ]);
+        if (! $this->app->runningInConsole()) {
+            return;
         }
+
+        $this->commands([
+            Console\Command\ActivateApiKey::class,
+            Console\Command\AddScope::class,
+            Console\Command\DeactivateApiKey::class,
+            Console\Command\DeleteScope::class,
+            Console\Command\GenerateApiKey::class,
+            Console\Command\GenerateScope::class,
+            Console\Command\PrintApiKey::class,
+            Console\Command\PrintScope::class,
+            Console\Command\RemoveScope::class,
+        ]);
     }
 }
