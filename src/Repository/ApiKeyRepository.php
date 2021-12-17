@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
@@ -27,7 +28,7 @@ class ApiKeyRepository extends EntityRepository
             throw new DuplicateName('An API key already exists with the name: ' . $name);
         }
 
-        if (! $this->isValidName($name)) {
+        if (!$this->isValidName($name)) {
             throw new InvalidName('Please provide a valid name: [a-z0-9-]');
         }
 
@@ -44,6 +45,7 @@ class ApiKeyRepository extends EntityRepository
             ->setStatusAt(new DateTime());
 
         $this->getEntityManager()->persist($apiKey);
+        $this->getEntityManager()->persist($this->logAdminEvent($apiKey,'generate'));
 
         return $apiKey;
     }
@@ -53,6 +55,9 @@ class ApiKeyRepository extends EntityRepository
         $apiKey
             ->setIsActive($status)
             ->setStatusAt(new DateTime());
+
+        $eventName = ($status) ? 'activate': 'deactivate';
+        $this->getEntityManager()->persist($this->logAdminEvent($apiKey, $eventName));
 
         return $apiKey;
     }
@@ -69,6 +74,8 @@ class ApiKeyRepository extends EntityRepository
         $apiKey->addScope($scope);
         $scope->addApiKey($apiKey);
 
+        $this->getEntityManager()->persist($this->logAdminEvent($apiKey, 'add scope: ' . $scope->getName()));
+
         return $apiKey;
     }
 
@@ -82,7 +89,7 @@ class ApiKeyRepository extends EntityRepository
             }
         }
 
-        if (! $found) {
+        if (!$found) {
             throw new ApiKeyDoesNotHaveScope(
                 'The requested Scope to remove does not exist on the ApiKey'
             );
@@ -91,11 +98,23 @@ class ApiKeyRepository extends EntityRepository
         $apiKey->removeScope($scope);
         $scope->removeApiKey($apiKey);
 
+        $this->getEntityManager()->persist($this->logAdminEvent($apiKey, 'remove scope: ' . $scope->getName()));
+
         return $apiKey;
     }
 
     public function isValidName(string $name): bool
     {
-        return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
+        return (bool)preg_match('/^[a-z0-9-]{1,255}$/', $name);
+    }
+
+    protected function logAdminEvent(ApiKey $apiKey, string $eventName)
+    {
+        return (new AdminEvent())
+            ->setIpAddress(request()->ip())
+            ->setApiKey($apiKey)
+            ->setEvent($eventName)
+            ->setCreatedAt(new DateTime())
+            ;
     }
 }

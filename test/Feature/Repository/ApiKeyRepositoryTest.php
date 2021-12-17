@@ -2,6 +2,7 @@
 
 namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey\Feature\Repository;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
@@ -25,6 +26,14 @@ final class ApiKeyRepositoryTest extends TestCase
         $this->assertEquals('testing', $apiKey->getName());
         $this->assertEquals(64, strlen($apiKey->getApiKey()));
         $this->assertEquals(true, $apiKey->getIsActive());
+
+        $adminEvents = $entityManager->getRepository(AdminEvent::class)
+            ->findAll();
+
+        foreach ($adminEvents as $adminEvent) {
+            $this->assertEquals('generate', $adminEvent->getEvent());
+            $this->assertEquals($apiKey, $adminEvent->getApiKey());
+        }
     }
 
     public function testGenerateValidatesName(): void
@@ -50,7 +59,7 @@ final class ApiKeyRepositoryTest extends TestCase
         $result = $repository->generate('testing');
     }
 
-    public function testSetStatus(): void
+    public function testDeativate(): void
     {
         $entityManager = $this->createDatabase(app('em'));
         $repository = $entityManager->getRepository(ApiKey::class);
@@ -66,6 +75,49 @@ final class ApiKeyRepositoryTest extends TestCase
 
         $this->assertGreaterThan($beforeSetStatus, $apiKey->getStatusAt());
         $this->assertEquals(false, $apiKey->getIsActive());
+
+        $adminEvents = $entityManager->getRepository(AdminEvent::class)
+            ->findBy([
+                'apiKey' => $apiKey,
+                'event' => 'deactivate',
+            ]);
+
+        $this->assertEquals(1,  count($adminEvents));
+        foreach ($adminEvents as $adminEvent) {
+            $this->assertEquals('deactivate', $adminEvent->getEvent());
+            $this->assertEquals($apiKey, $adminEvent->getApiKey());
+        }
+    }
+
+    public function testActivate(): void
+    {
+        $entityManager = $this->createDatabase(app('em'));
+        $repository = $entityManager->getRepository(ApiKey::class);
+        $apiKey = $repository->generate('testing');
+        $apiKey->setIsActive(false);
+        $entityManager->flush();
+
+        $beforeSetStatus = new DateTime();
+
+        $this->assertEquals(false, $apiKey->getIsActive());
+
+        $repository->updateActive($apiKey, true);
+        $entityManager->flush();
+
+        $this->assertGreaterThan($beforeSetStatus, $apiKey->getStatusAt());
+        $this->assertEquals(true, $apiKey->getIsActive());
+
+        $adminEvents = $entityManager->getRepository(AdminEvent::class)
+            ->findBy([
+                'apiKey' => $apiKey,
+                'event' => 'activate',
+            ]);
+
+        $this->assertEquals(1,  count($adminEvents));
+        foreach ($adminEvents as $adminEvent) {
+            $this->assertEquals('activate', $adminEvent->getEvent());
+            $this->assertEquals($apiKey, $adminEvent->getApiKey());
+        }
     }
 
     public function testAddScope(): void
@@ -91,6 +143,18 @@ final class ApiKeyRepositoryTest extends TestCase
         }
 
         $this->assertTrue($found);
+
+        $adminEvents = $entityManager->getRepository(AdminEvent::class)
+            ->findBy([
+                'apiKey' => $apiKey,
+                'event' => 'add scope: ' . $scope->getName(),
+            ]);
+
+        $this->assertEquals(1,  count($adminEvents));
+        foreach ($adminEvents as $adminEvent) {
+            $this->assertEquals('add scope: ' . $scope->getName(), $adminEvent->getEvent());
+            $this->assertEquals($apiKey, $adminEvent->getApiKey());
+        }
     }
 
     public function testCannotAddSameScopeTwice(): void
@@ -131,6 +195,18 @@ final class ApiKeyRepositoryTest extends TestCase
         $entityManager->flush();
 
         $this->assertEquals(0, sizeof($apiKey->getScopes()));
+
+        $adminEvents = $entityManager->getRepository(AdminEvent::class)
+            ->findBy([
+                'apiKey' => $apiKey,
+                'event' => 'remove scope: ' . $scope->getName(),
+            ]);
+
+        $this->assertEquals(1,  count($adminEvents));
+        foreach ($adminEvents as $adminEvent) {
+            $this->assertEquals('remove scope: ' . $scope->getName(), $adminEvent->getEvent());
+            $this->assertEquals($apiKey, $adminEvent->getApiKey());
+        }
     }
 
     public function testRemoveScopeWhichIsNotAssigned(): void
