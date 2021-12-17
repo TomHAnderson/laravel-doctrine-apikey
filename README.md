@@ -176,3 +176,8 @@ $routeMiddleware = [
     'auth.apikey2' => EditedAuthorizeApiKey:class
 ];
 ```
+
+## Inspired By
+
+The repository https://github.com/ejarnutowski/laravel-api-key was the inispiration for this
+repository.  It seemed a fine project but did not have unit tests or scopes.
