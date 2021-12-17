@@ -7,7 +7,7 @@
 [![License](https://poser.pugx.org/api-skeletons/laravel-doctrine-apikey/license)](//packagist.org/packages/api-skeletons/laravel-doctrine-apikey)
 
 This repository provides a driver for Doctrine which can be added to an existing entity manager.  
-The driver provies a set of entities which enable ApiKey authorization through HTTP middleware.
+The driver provides a set of entities which enable ApiKey authorization through HTTP middleware.
 Scopes are supported!  This was the missing piece of other repositories which catalyzed the creation of this library.
 
 ## Installation
@@ -64,6 +64,11 @@ Begin making requests to your ApiKey protected resource using your key as a Bear
 ```sh
 Authorization: Bearer {key}
 ```
+
+
+## Schema
+
+![Screen Shot 2021-12-17 at 12 20 03 AM](https://user-images.githubusercontent.com/493920/146505347-09778bde-9fff-4c46-819d-fbf2e83d3ad2.png)
 
 
 ## Using Scopes
@@ -137,7 +142,7 @@ method of maintaining data in the second object manager.  In order
 to use multiple object managers you must do some configuration.  Assuming you followed the Quick Start, above,
 follow these steps for a second object manager:
 
-Create a new singleton of the ApiKeyService with a differnet name in `App\Providers\AppServiceProvider`
+Create a new singleton of the ApiKeyService with a different name in `App\Providers\AppServiceProvider`
 ```php
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 
