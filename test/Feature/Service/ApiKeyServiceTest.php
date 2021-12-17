@@ -38,7 +38,8 @@ final class ApiKeyServiceTest extends TestCase
         $apiKey = $apiKeyRepository->generate('testing');
         $entityManager->flush();
 
-        $this->assertTrue($apiKeyService->isActive($apiKey->getKey()));
+        $apiKey = $apiKeyService->isActive($apiKey->getKey());
+        $this->assertInstanceOf(ApiKey::class, $apiKey);
     }
 
     public function testIsActiveReturnsFalseForInvalidKey(): void

@@ -2,10 +2,12 @@
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Service;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Illuminate\Http\Request;
 
 class ApiKeyService
 {
@@ -35,18 +37,18 @@ class ApiKeyService
         return $this;
     }
 
-    public function isActive(string $key): bool
+    public function isActive(string $key): ApiKey|bool
     {
         $apiKey = $this->entityManager->getRepository(ApiKey::class)
             ->findOneBy([
                 'key' => $key,
             ]);
 
-        if (! $apiKey) {
+        if (! $apiKey || ! $apiKey->getIsActive()) {
             return false;
         }
 
-        return $apiKey->getIsActive();
+        return $apiKey;
     }
 
     public function hasScope(string $key, string $scopeName): bool
@@ -76,4 +78,22 @@ class ApiKeyService
         return $found;
     }
 
+    /**
+     * Log an access event
+     *
+     * @param Request $request
+     * @param ApiKey $apiKey
+     */
+    public function logAccessEvent(Request $request, ApiKey $apiKey)
+    {
+        $event = (new AccessEvent())
+            ->setCreatedAt(new \DateTime())
+            ->setApiKey($apiKey)
+            ->setIpAddress($request->ip())
+            ->setUrl($request->fullUrl())
+        ;
+
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
+    }
 }
