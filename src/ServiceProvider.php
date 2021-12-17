@@ -2,6 +2,7 @@
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware\AuthorizeApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
@@ -14,6 +15,9 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
+        $this->app->singleton(ApiKeyService::class, function ($app) {
+            return new ApiKeyService();
+        });
     }
 
     /**
@@ -23,9 +27,7 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
-        $this->app->singleton(ApiKeyService::class, function ($app) {
-            return new ApiKeyService();
-        });
+        $this->app['router']->middleware('auth.apiKey', AuthorizeApiKey::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([
