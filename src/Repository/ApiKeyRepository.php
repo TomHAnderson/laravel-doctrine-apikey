@@ -4,7 +4,9 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateScopeForApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
@@ -60,7 +62,7 @@ class ApiKeyRepository extends EntityRepository
         // Do not add scopes twice
         foreach ($apiKey->getScopes() as $s) {
             if ($s === $scope) {
-                return $apiKey;
+                throw new DuplicateScopeForApiKey('ApiKey already has requested scope');
             }
         }
 
@@ -80,10 +82,14 @@ class ApiKeyRepository extends EntityRepository
             }
         }
 
-        if ($found) {
-            $apiKey->removeScope($scope);
-            $scope->removeApiKey($apiKey);
+        if (! $found) {
+            throw new ApiKeyDoesNotHaveScope(
+                'The requested Scope to remove does not exist on the ApiKey'
+            );
         }
+
+        $apiKey->removeScope($scope);
+        $scope->removeApiKey($apiKey);
 
         return $apiKey;
     }

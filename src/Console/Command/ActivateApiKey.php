@@ -63,8 +63,18 @@ final class ActivateApiKey extends Command
         $apiKeyRepository->updateActive($apiKey, true);
         $this->apiKeyService->getEntityManager()->flush();
 
-        $headers = ['name', 'key', 'status'];
-        $rows = [[$apiKey->getName(), $apiKey->getKey(), $apiKey->getIsActive() ? 'active': 'deactivated']];
+        $scopeNames = [];
+        foreach ($apiKey->getScopes() as $s) {
+            $scopeNames[] = $s->getName();
+        }
+
+        $headers = ['name', 'key', 'status', 'scopes'];
+        $rows = [[
+            $apiKey->getName(),
+            $apiKey->getKey(),
+            $apiKey->getIsActive() ? 'active': 'deactivated',
+            implode(',', $scopeNames)
+        ]];
 
         $this->table($headers, $rows);
 

@@ -60,8 +60,18 @@ final class PrintApiKey extends Command
             return 1;
         }
 
-        $headers = ['name', 'key', 'status'];
-        $rows = [[$apiKey->getName(), $apiKey->getKey(), $apiKey->getIsActive() ? 'active': 'deactivated']];
+        $scopeNames = [];
+        foreach ($apiKey->getScopes() as $s) {
+            $scopeNames[] = $s->getName();
+        }
+
+        $headers = ['name', 'key', 'status', 'scopes'];
+        $rows = [[
+            $apiKey->getName(),
+            $apiKey->getKey(),
+            $apiKey->getIsActive() ? 'active': 'deactivated',
+            implode(',', $scopeNames)
+        ]];
 
         $this->table($headers, $rows);
 

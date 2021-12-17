@@ -4,7 +4,9 @@ namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey\Feature\Repository;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateScopeForApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
 use DateTime;
@@ -93,6 +95,8 @@ final class ApiKeyRepositoryTest extends TestCase
 
     public function testCannotAddSameScopeTwice(): void
     {
+        $this->expectException(DuplicateScopeForApiKey::class);
+
         $entityManager = $this->createDatabase(app('em'));
         $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
         $scopeRepository = $entityManager->getRepository(Scope::class);
@@ -106,9 +110,6 @@ final class ApiKeyRepositoryTest extends TestCase
         $entityManager->flush();
 
         $apiKeyRepository->addScope($apiKey, $scope);
-        $entityManager->flush();
-
-        $this->assertEquals(1, sizeof($apiKey->getScopes()));
     }
 
     public function testRemoveScope(): void
@@ -130,5 +131,26 @@ final class ApiKeyRepositoryTest extends TestCase
         $entityManager->flush();
 
         $this->assertEquals(0, sizeof($apiKey->getScopes()));
+    }
+
+    public function testRemoveScopeWhichIsNotAssigned(): void
+    {
+        $this->expectException(ApiKeyDoesNotHaveScope::class);
+
+        $entityManager = $this->createDatabase(app('em'));
+        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+        $apiKey = $apiKeyRepository->generate('testing');
+        $entityManager->flush();
+
+        $scope = $scopeRepository->generate('testing');
+        $scope2 = $scopeRepository->generate('testing2');
+        $entityManager->flush();
+        $apiKeyRepository->addScope($apiKey, $scope);
+        $entityManager->flush();
+
+        $this->assertEquals(1, sizeof($apiKey->getScopes()));
+
+        $apiKeyRepository->removeScope($apiKey, $scope2);
     }
 }
