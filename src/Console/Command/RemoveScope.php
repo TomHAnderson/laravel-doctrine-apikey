@@ -19,7 +19,7 @@ final class RemoveScope extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Remove a Scope from an ApiKey';
+    protected $description = 'Remove a scope from an apikey';
 
     /**
      * Execute the console command.

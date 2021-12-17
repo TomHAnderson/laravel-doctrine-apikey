@@ -17,7 +17,7 @@ final class DeactivateApiKey extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Deactivate an ApiKey';
+    protected $description = 'Deactivate an apikey';
 
     /**
      * Execute the console command.

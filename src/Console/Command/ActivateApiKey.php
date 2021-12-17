@@ -17,7 +17,7 @@ final class ActivateApiKey extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Activate an ApiKey';
+    protected $description = 'Activate an apikey';
 
     /**
      * Execute the console command.
