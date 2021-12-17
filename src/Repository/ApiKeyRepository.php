@@ -111,10 +111,14 @@ class ApiKeyRepository extends EntityRepository
 
     protected function logAdminEvent(ApiKey $apiKey, string $eventName): AdminEvent
     {
-        return (new AdminEvent())
+        $adminEvent = (new AdminEvent())
             ->setIpAddress(request()->ip())
             ->setApiKey($apiKey)
             ->setEvent($eventName)
             ->setCreatedAt(new DateTime());
+
+        $apiKey->addAdminEvent($adminEvent);
+
+        return $adminEvent;
     }
 }

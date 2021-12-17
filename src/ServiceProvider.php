@@ -22,22 +22,21 @@ class ServiceProvider extends LaravelServiceProvider
     /**
      * Bootstrap any application services.
      */
+    // phpcs:disable SlevomatCodingStandard.ControlStructures.EarlyExit.EarlyExitNotUsed
     public function boot(): void
     {
-        if (! $this->app->runningInConsole()) {
-            return;
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\Command\ActivateApiKey::class,
+                Console\Command\AddScope::class,
+                Console\Command\DeactivateApiKey::class,
+                Console\Command\DeleteScope::class,
+                Console\Command\GenerateApiKey::class,
+                Console\Command\GenerateScope::class,
+                Console\Command\PrintApiKey::class,
+                Console\Command\PrintScope::class,
+                Console\Command\RemoveScope::class,
+            ]);
         }
-
-        $this->commands([
-            Console\Command\ActivateApiKey::class,
-            Console\Command\AddScope::class,
-            Console\Command\DeactivateApiKey::class,
-            Console\Command\DeleteScope::class,
-            Console\Command\GenerateApiKey::class,
-            Console\Command\GenerateScope::class,
-            Console\Command\PrintApiKey::class,
-            Console\Command\PrintScope::class,
-            Console\Command\RemoveScope::class,
-        ]);
     }
 }
