@@ -85,6 +85,8 @@ class ApiKeyService
             ->setIpAddress($request->ip())
             ->setUrl($request->fullUrl());
 
+        $apiKey->addAccessEvent($event);
+
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();
     }

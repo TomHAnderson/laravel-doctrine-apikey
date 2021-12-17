@@ -8,6 +8,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
+use DateTime;
 
 final class ScopeRepositoryTest extends TestCase
 {
@@ -16,10 +17,13 @@ final class ScopeRepositoryTest extends TestCase
         $entityManager = $this->createDatabase(app('em'));
         $repository = $entityManager->getRepository(Scope::class);
 
+        $now = new DateTime();
+
         $scope = $repository->generate('testing');
         $entityManager->flush();
 
         $this->assertGreaterThan(0, $scope->getId());
+        $this->assertGreaterThan($now, $scope->getCreatedAt());
         $this->assertEquals('testing', $scope->getName());
     }
 
