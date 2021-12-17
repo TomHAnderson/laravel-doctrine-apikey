@@ -28,6 +28,17 @@ Add Service Provider to app.php
     ],
 ```
 
+Add the route middleware to Http Kernel
+```php
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware\AuthorizeApiKey;
+
+$routeMiddleware = [
+    ...
+    'auth.apiKey' => AuthorizeApiKey:class
+];
+```
+
+
 Initialize the ApiKey service for your entity manager in `App\Providers\AppServiceProvider`
 ```php
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;

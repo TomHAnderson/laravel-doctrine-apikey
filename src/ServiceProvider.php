@@ -25,8 +25,6 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot(): void
     {
-        $this->app['router']->middleware('auth.apiKey', AuthorizeApiKey::class);
-
         if (! $this->app->runningInConsole()) {
             return;
         }
