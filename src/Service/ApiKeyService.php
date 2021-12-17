@@ -42,7 +42,7 @@ class ApiKeyService
     public function isActive(string $key): ApiKey|bool
     {
         $apiKey = $this->entityManager->getRepository(ApiKey::class)
-            ->findOneBy(['key' => $key]);
+            ->findOneBy(['api_key' => $key]);
 
         if (! $apiKey || ! $apiKey->getIsActive()) {
             return false;
@@ -54,7 +54,7 @@ class ApiKeyService
     public function hasScope(string $key, string $scopeName): bool
     {
         $apiKey = $this->entityManager->getRepository(ApiKey::class)
-            ->findOneBy(['key' => $key]);
+            ->findOneBy(['api_key' => $key]);
 
         $scope = $this->entityManager->getRepository(Scope::class)
             ->findOneBy(['name' => $scopeName]);

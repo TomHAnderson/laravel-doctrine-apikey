@@ -5,7 +5,7 @@
       <generator strategy="AUTO"/>
     </id>
     <field name="name" type="string" unique="true" nullable="false"/>
-    <field name="key" type="string" unique="true" nullable="false"/>
+    <field name="api_key" type="string" unique="true" nullable="false"/>
     <field name="is_active" type="boolean" nullable="false"/>
     <field name="created_at" type="datetime" nullable="false"/>
     <field name="status_at" type="datetime" nullable="false"/>

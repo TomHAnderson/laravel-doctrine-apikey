@@ -84,7 +84,7 @@ final class AddScope extends Command
         $rows    = [
             [
                 $apiKey->getName(),
-                $apiKey->getKey(),
+                $apiKey->getApiKey(),
                 $apiKey->getIsActive() ? 'active' : 'deactivated',
                 implode(',', $scopeNames),
             ],

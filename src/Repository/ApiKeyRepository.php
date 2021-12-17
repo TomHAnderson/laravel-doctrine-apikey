@@ -33,12 +33,12 @@ class ApiKeyRepository extends EntityRepository
 
         do {
             $key = Str::random(64);
-        } while ($this->findBy(['key' => $key]));
+        } while ($this->findBy(['api_key' => $key]));
 
         $apiKey = new ApiKey();
         $apiKey
             ->setName($name)
-            ->setKey($key)
+            ->setApiKey($key)
             ->setCreatedAt(new DateTime())
             ->setIsActive(true)
             ->setStatusAt(new DateTime());

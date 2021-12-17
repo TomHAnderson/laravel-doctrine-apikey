@@ -15,7 +15,7 @@ class ApiKey
     /**
      * @var string
      */
-    private $key;
+    private $api_key;
 
     /**
      * @var bool
@@ -87,27 +87,27 @@ class ApiKey
     }
 
     /**
-     * Set key.
+     * Set apiKey.
      *
-     * @param string $key
+     * @param string $apiKey
      *
      * @return ApiKey
      */
-    public function setKey($key)
+    public function setApiKey($apiKey)
     {
-        $this->key = $key;
+        $this->api_key = $apiKey;
 
         return $this;
     }
 
     /**
-     * Get key.
+     * Get apiKey.
      *
      * @return string
      */
-    public function getKey()
+    public function getApiKey()
     {
-        return $this->key;
+        return $this->api_key;
     }
 
     /**

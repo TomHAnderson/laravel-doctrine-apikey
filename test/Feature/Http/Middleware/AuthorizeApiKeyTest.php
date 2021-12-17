@@ -20,7 +20,7 @@ final class AuthorizeApiKeyTest extends TestCase
         $entityManager->flush();
 
         $request = Request::create('/apiresource', 'GET');
-        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getKey());
+        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getApiKey());
 
         $middleware = new AuthorizeApiKey(app(ApiKeyService::class));
 
@@ -54,7 +54,7 @@ final class AuthorizeApiKeyTest extends TestCase
         $entityManager->flush();
 
         $request = Request::create('/apiresource', 'GET');
-        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getKey());
+        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getApiKey());
 
         $middleware = new AuthorizeApiKey(app(ApiKeyService::class));
 
@@ -73,7 +73,7 @@ final class AuthorizeApiKeyTest extends TestCase
         $entityManager->flush();
 
         $request = Request::create('/apiresource', 'GET');
-        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getKey());
+        $request->headers->set('Authorization', 'Bearer ' . $apiKey->getApiKey());
 
         $middleware = new AuthorizeApiKey(app(ApiKeyService::class));
 

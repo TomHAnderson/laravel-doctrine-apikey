@@ -23,7 +23,7 @@ final class ApiKeyRepositoryTest extends TestCase
 
         $this->assertGreaterThan(0, $apiKey->getId());
         $this->assertEquals('testing', $apiKey->getName());
-        $this->assertEquals(64, strlen($apiKey->getKey()));
+        $this->assertEquals(64, strlen($apiKey->getApiKey()));
         $this->assertEquals(true, $apiKey->getIsActive());
     }
 

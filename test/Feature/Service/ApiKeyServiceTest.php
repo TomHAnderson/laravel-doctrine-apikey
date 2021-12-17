@@ -38,7 +38,7 @@ final class ApiKeyServiceTest extends TestCase
         $apiKey = $apiKeyRepository->generate('testing');
         $entityManager->flush();
 
-        $apiKey = $apiKeyService->isActive($apiKey->getKey());
+        $apiKey = $apiKeyService->isActive($apiKey->getApiKey());
         $this->assertInstanceOf(ApiKey::class, $apiKey);
     }
 
@@ -68,7 +68,7 @@ final class ApiKeyServiceTest extends TestCase
         $apiKey = $apiKeyRepository->updateActive($apiKey, false);
         $entityManager->flush();
 
-        $this->assertFalse($apiKeyService->isActive($apiKey->getKey()));
+        $this->assertFalse($apiKeyService->isActive($apiKey->getApiKey()));
     }
 
     public function testHasScope(): void
@@ -87,7 +87,7 @@ final class ApiKeyServiceTest extends TestCase
         $apiKeyRepository->addScope($apiKey, $scope);
         $entityManager->flush();
 
-        $this->assertTrue($apiKeyService->hasScope($apiKey->getKey(), 'scope1'));
+        $this->assertTrue($apiKeyService->hasScope($apiKey->getApiKey(), 'scope1'));
     }
 
     public function testHasScopeReturnsFalseForInvalidApiKey(): void
@@ -125,6 +125,6 @@ final class ApiKeyServiceTest extends TestCase
         $apiKeyRepository->addScope($apiKey, $scope);
         $entityManager->flush();
 
-        $this->assertFalse($apiKeyService->hasScope($apiKey->getKey(), 'scope2'));
+        $this->assertFalse($apiKeyService->hasScope($apiKey->getApiKey(), 'scope2'));
     }
 }

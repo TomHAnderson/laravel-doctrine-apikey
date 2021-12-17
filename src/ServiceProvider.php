@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey;
 
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware\AuthorizeApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
