@@ -5,6 +5,7 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Exception;
@@ -45,7 +46,7 @@ class ScopeRepository extends EntityRepository
     public function delete(Scope $scope): Scope|bool
     {
         if (! $this->canDelete($scope)) {
-            return false;
+            throw new ScopeHasApiKeys('Cannot delete scope because it has ApiKeys assigned to it.');
         }
 
         $this->getEntityManager()->remove($scope);

@@ -52,7 +52,7 @@ final class GenerateScope extends Command
             ->getRepository(Scope::class);
 
         try {
-            $scopeRepository->generate($name);
+            $scope = $scopeRepository->generate($name);
         } catch (DuplicateName $e) {
             $this->error($e->getMessage());
 
@@ -63,16 +63,8 @@ final class GenerateScope extends Command
             return 1;
         }
 
-
-
-        if (! $apiKey) {
-            $this->error('Invalid apiKey name');
-
-            return 1;
-        }
-
-        $headers = ['name', 'key', 'status'];
-        $rows = [[$apiKey->getName(), $apiKey->getKey(), $apiKey->getIsActive() ? 'active': 'deactivated']];
+        $headers = ['name', 'apiKey count'];
+        $rows = [[$scope->getName(), sizeof($scope->getApiKeys())]];
 
         $this->table($headers, $rows);
 

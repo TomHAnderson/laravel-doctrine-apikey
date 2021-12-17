@@ -6,6 +6,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
 
 final class ScopeRepositoryTest extends TestCase
@@ -59,6 +60,8 @@ final class ScopeRepositoryTest extends TestCase
 
     public function testCannotDeleteScopeWithApiKeys(): void
     {
+        $this->expectException(ScopeHasApiKeys::class);
+
         $entityManager = $this->createDatabase(app('em'));
         $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
         $scopeRepository = $entityManager->getRepository(Scope::class);
@@ -70,6 +73,5 @@ final class ScopeRepositoryTest extends TestCase
         $entityManager->flush();
 
         $result = $scopeRepository->delete($scope);
-        $this->assertFalse($result);
     }
 }
