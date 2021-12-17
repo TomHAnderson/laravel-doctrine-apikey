@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 
 use function implode;
 
+// phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class ActivateApiKey extends Command
 {
     private ApiKeyService $apiKeyService;
@@ -17,12 +18,12 @@ final class ActivateApiKey extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'apikey:activate {name}';
+    protected $signature = 'apikey:activate {name}';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Activate an ApiKey';
+    protected $description = 'Activate an ApiKey';
 
     /**
      * Create a new command instance.

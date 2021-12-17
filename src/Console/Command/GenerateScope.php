@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
 
 use function count;
 
+// phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class GenerateScope extends Command
 {
     private ApiKeyService $apiKeyService;
@@ -19,12 +20,12 @@ final class GenerateScope extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'apikey:scope:generate {name}';
+    protected $signature = 'apikey:scope:generate {name}';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Generate a new ApiKey Scope';
+    protected $description = 'Generate a new ApiKey Scope';
 
     /**
      * Create a new command instance.

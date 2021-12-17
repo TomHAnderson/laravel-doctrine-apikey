@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
 
 use function implode;
 
+// phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class AddScope extends Command
 {
     private ApiKeyService $apiKeyService;
@@ -19,12 +20,12 @@ final class AddScope extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'apikey:scope:add {apiKeyName} {scopeName}';
+    protected $signature = 'apikey:scope:add {apiKeyName} {scopeName}';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Add a Scope to an ApiKey';
+    protected $description = 'Add a Scope to an ApiKey';
 
     /**
      * Create a new command instance.

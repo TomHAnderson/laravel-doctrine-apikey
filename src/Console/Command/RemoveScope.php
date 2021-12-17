@@ -12,6 +12,7 @@ use Illuminate\Console\Command;
 
 use function implode;
 
+// phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class RemoveScope extends Command
 {
     private ApiKeyService $apiKeyService;
@@ -19,12 +20,12 @@ final class RemoveScope extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'apikey:scope:remove {apiKeyName} {scopeName}';
+    protected $signature = 'apikey:scope:remove {apiKeyName} {scopeName}';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Remove a Scope from an ApiKey';
+    protected $description = 'Remove a Scope from an ApiKey';
 
     /**
      * Create a new command instance.

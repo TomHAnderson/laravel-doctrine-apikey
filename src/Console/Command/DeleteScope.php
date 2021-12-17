@@ -9,6 +9,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
 
+// phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class DeleteScope extends Command
 {
     private ApiKeyService $apiKeyService;
@@ -16,12 +17,12 @@ final class DeleteScope extends Command
     /**
      * The name and signature of the console command.
      */
-    protected string $signature = 'apikey:scope:delete {name}';
+    protected $signature = 'apikey:scope:delete {name}';
 
     /**
      * The console command description.
      */
-    protected string $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
+    protected $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
 
     /**
      * Create a new command instance.

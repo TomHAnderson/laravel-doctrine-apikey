@@ -23,7 +23,7 @@ class ApiKeyService
 
     public function init(EntityManager $entityManager): self|bool
     {
-        if ($this->entityManager === null) {
+        if ($this->entityManager !== null) {
             return false;
         }
 

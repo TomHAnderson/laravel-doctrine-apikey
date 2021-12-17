@@ -27,6 +27,14 @@ class AuthorizeApiKey
     {
         $header = $request->header('Authorization');
         // Remove Bearer from key prefix
+        if (! $header) {
+            return response([
+                'errors' => [
+                    ['message' => 'Unauthorized'],
+                ],
+            ], 401);
+        }
+
         $key = substr($header, 7);
 
         $apiKey = $this->apiKeyService->isActive($key);
