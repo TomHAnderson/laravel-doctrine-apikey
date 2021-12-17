@@ -50,7 +50,7 @@ Route::name('api.resource::fetch')
     ->middleware('auth.apikey');
 ```
 
-Begin making requests to your ApiKey protected resource using you key as a Bearer token in the Authorization header
+Begin making requests to your ApiKey protected resource using your key as a Bearer token in the Authorization header
 ```sh
 Authorization: Bearer {key}
 ```
