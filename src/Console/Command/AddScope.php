@@ -19,7 +19,7 @@ final class AddScope extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Add a Scope to an ApiKey';
+    protected $description = 'Add a scope to an apikey';
 
     /**
      * Execute the console command.

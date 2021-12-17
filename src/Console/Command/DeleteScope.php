@@ -18,7 +18,7 @@ final class DeleteScope extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
+    protected $description = 'Delete a scope (delete a scope, not an apikey relationship)';
 
     /**
      * Execute the console command.
