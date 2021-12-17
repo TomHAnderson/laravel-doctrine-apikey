@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<skipper version="3.2.36.1772" mvc="Without MVC" orm="Doctrine2">
+  <module name="\ApiKey" local-name="ApiKey" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" local-namespace="ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" export-format="Doctrine2Xml" export-path="config/orm" uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3">
+    <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey" local-name="ApiKey" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" uuid="5d41775f-e84c-4890-a202-19c4f93e3b58">
+      <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="1425ce9b-57d6-4c28-bd8b-89fffce92468"/>
+      <field name="name" type="string" required="true" unique="true" uuid="a0ea0895-aab4-4c93-b119-47c9539e95a2"/>
+      <field name="api_key" type="string" required="true" unique="true" uuid="e5a11137-9889-470a-8d5d-7ce1273d13df"/>
+      <field name="is_active" type="boolean" required="true" uuid="ba95511b-7e28-47b1-8cd1-eaa9a488dc96"/>
+      <field name="created_at" type="datetime" required="true" uuid="d09a3c83-1bd8-45fe-8b2c-9c46b4319c30"/>
+      <field name="status_at" type="datetime" required="true" uuid="49072f5c-bbbd-4e04-85df-656eaffd9025"/>
+      <orm-attributes>
+        <attribute name="table">api_keys</attribute>
+        <attribute name="repository-class">ApiSkeletons\Laravel\Doctrine\ApiKey\Repository\ApiKeyRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent" local-name="AccessEvent" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" uuid="3affb470-569a-4814-9456-e72403fe11d1">
+      <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="c5dc4997-b4de-4e4b-a908-5a18449cb408"/>
+      <field name="api_key_id" type="bigint" required="true" uuid="bbf2e1bc-0f62-4e9f-b7ca-2d7e22c183b7"/>
+      <field name="ip_address" type="string" required="true" uuid="e2cbaf2c-9780-42d9-9268-fa01aab29a50"/>
+      <field name="url" type="text" required="true" uuid="074fa7a8-b6f4-4ad2-be99-5d16c5dddcd2"/>
+      <field name="created_at" type="datetime" required="true" uuid="022132ec-5ecb-4888-9baf-437191e44619"/>
+      <orm-attributes>
+        <attribute name="table">api_key_access_events</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent" to="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey" caption="ApiKey AccessEvents" owner-alias="accessEvents" inverse-alias="apiKey" many-owner="true" many-inverse="false" parent-required="true" uuid="056be1e5-0677-44ad-8f6f-1b4023eb9a7d">
+      <association-field from="api_key_id" to="id" uuid="513eb40e-bd2d-4cd7-90c1-0bfadd7fd65b"/>
+    </association>
+    <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent" local-name="AdminEvent" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" uuid="69a65682-1289-49d8-a90b-4354347cb63a">
+      <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="f0ee1b16-32ab-41a6-98ec-6d2dfa79fdf4"/>
+      <field name="api_key_id" type="bigint" required="true" uuid="b4a70cfd-ff9e-4a70-91a8-aeb5b9a12e66"/>
+      <field name="ip_address" type="string" required="true" uuid="829642e0-c00a-467a-982e-3300f7857a20"/>
+      <field name="event" type="string" required="true" uuid="6d0bf317-4cbb-4368-9c8d-1a3d2fa04b50"/>
+      <field name="created_at" type="datetime" required="true" uuid="28d27429-0244-4d95-90b9-0a9a4a8a34d9"/>
+      <orm-attributes>
+        <attribute name="table">api_key_admin_events</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent" to="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey" caption="ApiKey AdminEvents" owner-alias="adminEvents" inverse-alias="apiKey" many-owner="true" many-inverse="false" parent-required="true" uuid="c997c4aa-195c-4f0e-8a32-5506f53f0ab9">
+      <association-field from="api_key_id" to="id" uuid="3008ad81-ee90-414d-a9e1-942008dfdbd2"/>
+    </association>
+    <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope" local-name="Scope" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" uuid="e2fc4483-5bba-4764-81cb-ca00f3a97ee2">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="83bbd436-c932-4790-ae35-fa8e9fc6b440"/>
+      <field name="name" type="string" required="true" unique="true" uuid="3e14cc31-010e-454e-b57a-103b82b8386c"/>
+      <field name="created_at" type="datetime" required="true" uuid="d590b2e3-48a9-4a50-831c-f9847aac3d13"/>
+      <orm-attributes>
+        <attribute name="table">api_key_scopes</attribute>
+        <attribute name="repository-class">ApiSkeletons\Laravel\Doctrine\ApiKey\Repository\ScopeRepository</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKeyToScope" local-name="ApiKeyToScope" namespace="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity" uuid="b9c06238-4131-4393-b380-09fd0e013f59">
+      <field name="scope_id" type="integer" required="true" primary="true" uuid="10cf6d1a-8e05-457a-8ed2-c5625a73dd05"/>
+      <field name="api_key_id" type="bigint" required="true" primary="true" uuid="4f02d09a-6c5e-4bc8-88fd-7a6990ef36fe"/>
+      <orm-attributes>
+        <attribute name="table">api_keys_to_scopes</attribute>
+      </orm-attributes>
+    </entity>
+    <many-to-many mn-entity="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKeyToScope" caption="ApiKey to Scope" uuid="f3287250-6321-4387-b98d-40b7df23f443">
+      <many-to-many-entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope" owning-side="true" alias="scopes" uuid="f75b71c7-98c4-4a41-88ad-6a9609396693">
+        <many-to-many-field from="scope_id" to="id" uuid="0eb7b1ed-b349-4194-a950-367fcedf472d"/>
+      </many-to-many-entity>
+      <many-to-many-entity name="\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey" owning-side="false" alias="apiKeys" uuid="0a6141b6-7908-46b6-b601-1baf1f494b63">
+        <many-to-many-field from="api_key_id" to="id" uuid="372299e3-ff2e-4880-a61e-4fe2a6b6ac36"/>
+      </many-to-many-entity>
+    </many-to-many>
+  </module>
+  <visual-data>
+    <entity uuid="3affb470-569a-4814-9456-e72403fe11d1" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="577" position-y="51" size-x="0" size-x2="109" size-y="0" size-y2="87"/>
+    <entity uuid="5d41775f-e84c-4890-a202-19c4f93e3b58" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="337" position-y="43" size-x="0" size-x2="112" size-y="0" size-y2="115"/>
+    <entity uuid="69a65682-1289-49d8-a90b-4354347cb63a" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="77" position-y="51" size-x="0" size-x2="109" size-y="0" size-y2="87"/>
+    <entity uuid="b9c06238-4131-4393-b380-09fd0e013f59" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="343" position-y="207" size-x="0" size-x2="100" size-y="0" size-y2="60"/>
+    <entity uuid="e2fc4483-5bba-4764-81cb-ca00f3a97ee2" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="337" position-y="325" size-x="0" size-x2="112" size-y="0" size-y2="73"/>
+    <many-to-many-association uuid="f3287250-6321-4387-b98d-40b7df23f443" color="#969696"/>
+    <module uuid="5bbfe5b4-7579-44ee-81f9-fa036ee071a3" bg-color="#E1EDF0" size-x="-57" size-x2="709" size-y="-18" size-y2="398"/>
+  </visual-data>
+</skipper>
