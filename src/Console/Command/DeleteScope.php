@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
@@ -15,17 +15,13 @@ final class DeleteScope extends Command
 
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
-    protected $signature = 'apikey:scope:delete {name}';
+    protected string $signature = 'apikey:scope:delete {name}';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
-    protected $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
+    protected string $description = 'Delete an ApiKey Scope (Delete a scope, not a relationship)';
 
     /**
      * Create a new command instance.
@@ -41,19 +37,15 @@ final class DeleteScope extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $name = $this->argument('name');
 
         $scopeRepository = $this->apiKeyService->getEntityManager()
             ->getRepository(Scope::class);
 
-        $scope = $scopeRepository->findOneBy([
-            'name' => $name,
-        ]);
+        $scope = $scopeRepository->findOneBy(['name' => $name]);
 
         if (! $scope) {
             $this->error('Cannot find scope with name: ' . $name);

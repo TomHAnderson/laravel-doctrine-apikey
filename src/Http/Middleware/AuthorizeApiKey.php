@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
+use Closure;
 use Illuminate\Http\Request;
+
+use function response;
+use function substr;
 
 class AuthorizeApiKey
 {
@@ -16,12 +22,8 @@ class AuthorizeApiKey
 
     /**
      * Handle request
-     *
-     * @param Request $request
-     * @param Closure $next
-     * @return mixed
      */
-    public function handle(Request $request, \Closure $next, string $scope = null)
+    public function handle(Request $request, Closure $next, ?string $scope = null): mixed
     {
         $header = $request->header('Authorization');
         // Remove Bearer from key prefix
@@ -29,14 +31,14 @@ class AuthorizeApiKey
 
         $apiKey = $this->apiKeyService->isActive($key);
         if ($apiKey) {
-            if ($scope) {
-                // If a scope is passed then verify it exists for the key
-                if ($this->apiKeyService->hasScope($key, $scope)) {
-                    $this->apiKeyService->logAccessEvent($request, $apiKey);
+            if (! $scope) {
+                $this->apiKeyService->logAccessEvent($request, $apiKey);
 
-                    return $next($request);
-                }
-            } else {
+                return $next($request);
+            }
+
+            // If a scope is passed then verify it exists for the key
+            if ($this->apiKeyService->hasScope($key, $scope)) {
                 $this->apiKeyService->logAccessEvent($request, $apiKey);
 
                 return $next($request);
@@ -44,10 +46,9 @@ class AuthorizeApiKey
         }
 
         return response([
-            'errors' => [[
-                'message' => 'Unauthorized'
-            ]]
+            'errors' => [
+                ['message' => 'Unauthorized'],
+            ],
         ], 401);
     }
 }
-

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
+
+use function implode;
 
 final class DeactivateApiKey extends Command
 {
@@ -14,17 +16,13 @@ final class DeactivateApiKey extends Command
 
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
-    protected $signature = 'apikey:deactivate {name}';
+    protected string $signature = 'apikey:deactivate {name}';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
-    protected $description = 'Deactivate an ApiKey';
+    protected string $description = 'Deactivate an ApiKey';
 
     /**
      * Create a new command instance.
@@ -40,19 +38,15 @@ final class DeactivateApiKey extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $name = $this->argument('name');
 
         $apiKeyRepository = $this->apiKeyService->getEntityManager()
             ->getRepository(ApiKey::class);
 
-        $apiKey = $apiKeyRepository->findOneBy([
-            'name' => $name,
-        ]);
+        $apiKey = $apiKeyRepository->findOneBy(['name' => $name]);
 
         if (! $apiKey) {
             $this->error('Invalid apiKey name');
@@ -69,12 +63,14 @@ final class DeactivateApiKey extends Command
         }
 
         $headers = ['name', 'key', 'status', 'scopes'];
-        $rows = [[
-            $apiKey->getName(),
-            $apiKey->getKey(),
-            $apiKey->getIsActive() ? 'active': 'deactivated',
-            implode(',', $scopeNames)
-        ]];
+        $rows    = [
+            [
+                $apiKey->getName(),
+                $apiKey->getKey(),
+                $apiKey->getIsActive() ? 'active' : 'deactivated',
+                implode(',', $scopeNames),
+            ],
+        ];
 
         $this->table($headers, $rows);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
@@ -12,14 +14,14 @@ use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Str;
 
+use function preg_match;
+
 class ApiKeyRepository extends EntityRepository
 {
-    public function generate($name): ApiKey
+    public function generate(string $name): ApiKey
     {
         // Verify name is unique
-        $apiKeys = $this->findBy([
-            'name' => $name,
-        ]);
+        $apiKeys = $this->findBy(['name' => $name]);
 
         if ($apiKeys) {
             throw new DuplicateName('An API key already exists with the name: ' . $name);
@@ -39,8 +41,7 @@ class ApiKeyRepository extends EntityRepository
             ->setKey($key)
             ->setCreatedAt(new DateTime())
             ->setIsActive(true)
-            ->setStatusAt(new DateTime())
-        ;
+            ->setStatusAt(new DateTime());
 
         $this->getEntityManager()->persist($apiKey);
 
@@ -51,8 +52,7 @@ class ApiKeyRepository extends EntityRepository
     {
         $apiKey
             ->setIsActive($status)
-            ->setStatusAt(new DateTime())
-            ;
+            ->setStatusAt(new DateTime());
 
         return $apiKey;
     }
@@ -94,7 +94,7 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
-    public function isValidName($name): bool
+    public function isValidName(string $name): bool
     {
         return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
     }

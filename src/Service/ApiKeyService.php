@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Service;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
+use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Illuminate\Http\Request;
@@ -20,7 +23,7 @@ class ApiKeyService
 
     public function init(EntityManager $entityManager): self|bool
     {
-        if  (! is_null($this->entityManager)) {
+        if ($this->entityManager === null) {
             return false;
         }
 
@@ -29,8 +32,7 @@ class ApiKeyService
         $entityManager
             ->getConfiguration()
             ->getMetadataDriverImpl()
-            ->addDriver($driver, 'ApiSkeletons\Laravel\Doctrine\ApiKey\Entity')
-            ;
+            ->addDriver($driver, 'ApiSkeletons\Laravel\Doctrine\ApiKey\Entity');
 
         $this->entityManager = $entityManager;
 
@@ -40,9 +42,7 @@ class ApiKeyService
     public function isActive(string $key): ApiKey|bool
     {
         $apiKey = $this->entityManager->getRepository(ApiKey::class)
-            ->findOneBy([
-                'key' => $key,
-            ]);
+            ->findOneBy(['key' => $key]);
 
         if (! $apiKey || ! $apiKey->getIsActive()) {
             return false;
@@ -54,14 +54,10 @@ class ApiKeyService
     public function hasScope(string $key, string $scopeName): bool
     {
         $apiKey = $this->entityManager->getRepository(ApiKey::class)
-            ->findOneBy([
-                'key' => $key,
-            ]);
+            ->findOneBy(['key' => $key]);
 
         $scope = $this->entityManager->getRepository(Scope::class)
-            ->findOneBy([
-                'name' => $scopeName,
-            ]);
+            ->findOneBy(['name' => $scopeName]);
 
         if (! $apiKey || ! $scope) {
             return false;
@@ -80,18 +76,14 @@ class ApiKeyService
 
     /**
      * Log an access event
-     *
-     * @param Request $request
-     * @param ApiKey $apiKey
      */
-    public function logAccessEvent(Request $request, ApiKey $apiKey)
+    public function logAccessEvent(Request $request, ApiKey $apiKey): void
     {
         $event = (new AccessEvent())
-            ->setCreatedAt(new \DateTime())
+            ->setCreatedAt(new DateTime())
             ->setApiKey($apiKey)
             ->setIpAddress($request->ip())
-            ->setUrl($request->fullUrl())
-        ;
+            ->setUrl($request->fullUrl());
 
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();

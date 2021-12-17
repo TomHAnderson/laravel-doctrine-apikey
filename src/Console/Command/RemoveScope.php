@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateScopeForApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
+
+use function implode;
 
 final class RemoveScope extends Command
 {
@@ -15,17 +18,13 @@ final class RemoveScope extends Command
 
     /**
      * The name and signature of the console command.
-     *
-     * @var string
      */
-    protected $signature = 'apikey:scope:remove {apiKeyName} {scopeName}';
+    protected string $signature = 'apikey:scope:remove {apiKeyName} {scopeName}';
 
     /**
      * The console command description.
-     *
-     * @var string
      */
-    protected $description = 'Remove a Scope from an ApiKey';
+    protected string $description = 'Remove a Scope from an ApiKey';
 
     /**
      * Create a new command instance.
@@ -41,31 +40,25 @@ final class RemoveScope extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): mixed
     {
         $apiKeyName = $this->argument('apiKeyName');
-        $scopeName = $this->argument('scopeName');
+        $scopeName  = $this->argument('scopeName');
 
         $apiKeyRepository = $this->apiKeyService->getEntityManager()
             ->getRepository(ApiKey::class);
-        $scopeRepository = $this->apiKeyService->getEntityManager()
+        $scopeRepository  = $this->apiKeyService->getEntityManager()
             ->getRepository(Scope::class);
 
-        $apiKey = $apiKeyRepository->findOneBy([
-            'name' => $apiKeyName,
-        ]);
+        $apiKey = $apiKeyRepository->findOneBy(['name' => $apiKeyName]);
         if (! $apiKey) {
             $this->error('Cannot find ApiKey with name: ' . $apiKeyName);
 
             return 1;
         }
 
-        $scope = $scopeRepository->findOneBy([
-            'name' => $scopeName,
-        ]);
+        $scope = $scopeRepository->findOneBy(['name' => $scopeName]);
         if (! $scope) {
             $this->error('Cannot find scope with name: ' . $scopeName);
 
@@ -87,12 +80,14 @@ final class RemoveScope extends Command
         }
 
         $headers = ['name', 'key', 'status', 'scopes'];
-        $rows = [[
-            $apiKey->getName(),
-            $apiKey->getKey(),
-            $apiKey->getIsActive() ? 'active': 'deactivated',
-            implode(',', $scopeNames)
-        ]];
+        $rows    = [
+            [
+                $apiKey->getName(),
+                $apiKey->getKey(),
+                $apiKey->getIsActive() ? 'active' : 'deactivated',
+                implode(',', $scopeNames),
+            ],
+        ];
 
         $this->table($headers, $rows);
 

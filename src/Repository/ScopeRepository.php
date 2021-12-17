@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
@@ -8,16 +10,16 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Exception;
+
+use function count;
+use function preg_match;
 
 class ScopeRepository extends EntityRepository
 {
-    public function generate($name): Scope
+    public function generate(string $name): Scope
     {
         // Verify name is unique
-        $scopes = $this->findBy([
-            'name' => $name,
-        ]);
+        $scopes = $this->findBy(['name' => $name]);
 
         if ($scopes) {
             throw new DuplicateName('A Scope already exists with the name: ' . $name);
@@ -30,8 +32,7 @@ class ScopeRepository extends EntityRepository
         $scope = new Scope();
         $scope
             ->setName($name)
-            ->setCreatedAt(new DateTime())
-            ;
+            ->setCreatedAt(new DateTime());
 
         $this->getEntityManager()->persist($scope);
 
@@ -40,7 +41,7 @@ class ScopeRepository extends EntityRepository
 
     public function canDelete(Scope $scope): bool
     {
-        return ! (bool) sizeof($scope->getApiKeys());
+        return ! (bool) count($scope->getApiKeys());
     }
 
     public function delete(Scope $scope): Scope|bool
@@ -54,7 +55,7 @@ class ScopeRepository extends EntityRepository
         return $scope;
     }
 
-    public function isValidName($name): bool
+    public function isValidName(string $name): bool
     {
         return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
     }
