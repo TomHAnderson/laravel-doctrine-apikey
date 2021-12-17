@@ -88,6 +88,13 @@ Route::name('api.resource::fetch')
 ```
 
 
+## Event Logging
+
+Admin events are logged when an ApiKey is generated, activated, deactivated, add a scope, and remove a scope.
+
+Access events are logged when the route middleware allows access to a resource.
+
+
 ## Commands
 
 Management of API keys is handled through the command line.  However, full access to all data-creating
