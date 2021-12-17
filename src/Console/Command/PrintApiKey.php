@@ -38,7 +38,7 @@ final class PrintApiKey extends Command
                 return 1;
             }
         } else {
-            $apiKeys = $apiKeyRepository->findAll();
+            $apiKeys = $apiKeyRepository->findBy([], ['name' => 'asc']);
         }
 
         $this->printApiKeys($apiKeys);

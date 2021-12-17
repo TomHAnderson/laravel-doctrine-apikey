@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command as IlluminateCommand;
+
+use function count;
+use function implode;
 
 abstract class Command extends IlluminateCommand
 {
@@ -31,7 +36,7 @@ abstract class Command extends IlluminateCommand
         $headers = ['name', 'api_key', 'status', 'scopes'];
 
         $rows = [];
-        foreach($apiKeys as $apiKey) {
+        foreach ($apiKeys as $apiKey) {
             $scopeNames = [];
             foreach ($apiKey->getScopes() as $s) {
                 $scopeNames[] = $s->getName();

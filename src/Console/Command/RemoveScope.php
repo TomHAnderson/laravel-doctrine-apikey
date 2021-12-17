@@ -7,9 +7,6 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ApiKeyDoesNotHaveScope;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-
-use function implode;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class RemoveScope extends Command

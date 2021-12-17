@@ -6,7 +6,6 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\ScopeHasApiKeys;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class DeleteScope extends Command

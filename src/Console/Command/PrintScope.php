@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
@@ -39,7 +38,7 @@ final class PrintScope extends Command
                 return 1;
             }
         } else {
-            $scopes = $scopeRepository->findAll();
+            $scopes = $scopeRepository->findBy([], ['name' => 'asc']);
         }
 
         $this->printScopes($scopes);

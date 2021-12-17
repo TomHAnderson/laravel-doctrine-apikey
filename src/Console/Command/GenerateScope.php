@@ -7,9 +7,6 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
-use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
-
-use function count;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class GenerateScope extends Command

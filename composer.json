@@ -36,5 +36,8 @@
                 "ApiSkeletons\\Laravel\\Doctrine\\ApiKey\\ServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpcs && vendor/bin/phpunit && vendor/bin/psalm"
     }
 }
