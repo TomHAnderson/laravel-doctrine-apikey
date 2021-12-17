@@ -8,7 +8,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
 
-final class PrintApiKey extends Command
+final class DeactivateApiKey extends Command
 {
     private ApiKeyService $apiKeyService;
 
@@ -17,14 +17,14 @@ final class PrintApiKey extends Command
      *
      * @var string
      */
-    protected $signature = 'apikey:print {name}';
+    protected $signature = 'apikey:deactivate {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Print an ApiKey';
+    protected $description = 'Deactivate an ApiKey';
 
     /**
      * Create a new command instance.
@@ -59,6 +59,9 @@ final class PrintApiKey extends Command
 
             return 1;
         }
+
+        $apiKeyRepository->updateActive($apiKey, false);
+        $this->apiKeyService->getEntityManager()->flush();
 
         $headers = ['name', 'key', 'status'];
         $rows = [[$apiKey->getName(), $apiKey->getKey(), $apiKey->getIsActive() ? 'active': 'deactivated']];

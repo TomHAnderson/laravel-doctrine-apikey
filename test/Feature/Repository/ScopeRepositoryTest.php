@@ -2,17 +2,20 @@
 
 namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey\Feature\Repository;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
 
 final class ScopeRepositoryTest extends TestCase
 {
-    public function testCreate(): void
+    public function testGenerate(): void
     {
         $entityManager = $this->createDatabase(app('em'));
         $repository = $entityManager->getRepository(Scope::class);
 
-        $scope = $repository->create('testing');
+        $scope = $repository->generate('testing');
         $entityManager->flush();
 
         $this->assertGreaterThan(0, $scope->getId());
@@ -23,12 +26,50 @@ final class ScopeRepositoryTest extends TestCase
     {
         $entityManager = $this->createDatabase(app('em'));
         $repository = $entityManager->getRepository(Scope::class);
-        $scope = $repository->create('testing');
+        $scope = $repository->generate('testing');
         $entityManager->flush();
 
         $repository->delete($scope);
         $entityManager->flush();
 
         $this->assertEmpty($repository->findOneBy(['name' => 'testing']));
+    }
+
+    public function testGenerateValidatesName(): void
+    {
+        $this->expectException(InvalidName::class);
+
+        $entityManager = $this->createDatabase(app('em'));
+        $repository = $entityManager->getRepository(Scope::class);
+
+        $repository->generate('test^name');
+    }
+
+    public function testCannotCreateDuplicateScope(): void
+    {
+        $this->expectException(DuplicateName::class);
+
+        $entityManager = $this->createDatabase(app('em'));
+        $repository = $entityManager->getRepository(Scope::class);
+        $repository->generate('testing');
+        $entityManager->flush();
+
+        $repository->generate('testing');
+    }
+
+    public function testCannotDeleteScopeWithApiKeys(): void
+    {
+        $entityManager = $this->createDatabase(app('em'));
+        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+        $apiKey = $apiKeyRepository->generate('testing');
+        $scope = $scopeRepository->generate('testing');
+        $entityManager->flush();
+
+        $apiKeyRepository->addScope($apiKey, $scope);
+        $entityManager->flush();
+
+        $result = $scopeRepository->delete($scope);
+        $this->assertFalse($result);
     }
 }

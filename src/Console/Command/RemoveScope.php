@@ -4,21 +4,21 @@ namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use Illuminate\Console\Command;
 
-final class DeleteApiKey extends Command
+final class RemoveScope extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'apikey:delete {apiKeyName}';
+    protected $signature = 'apikey:scope:remove {scopeName} {apiKeyName}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Soft delete an ApiKey';
+    protected $description = 'Remove a scope from an ApiKey';
 
     /**
      * Create a new command instance.

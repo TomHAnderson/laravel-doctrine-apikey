@@ -28,7 +28,7 @@ class AdminEvent
     private $id;
 
     /**
-     * @var \ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey
+     * @var \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey
      */
     private $apiKey;
 
@@ -118,11 +118,11 @@ class AdminEvent
     /**
      * Set apiKey.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey
      *
      * @return AdminEvent
      */
-    public function setApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey)
+    public function setApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey)
     {
         $this->apiKey = $apiKey;
 
@@ -132,7 +132,7 @@ class AdminEvent
     /**
      * Get apiKey.
      *
-     * @return \ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey
+     * @return \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey
      */
     public function getApiKey()
     {

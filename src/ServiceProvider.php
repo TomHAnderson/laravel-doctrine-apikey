@@ -2,19 +2,11 @@
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey;
 
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
 
 class ServiceProvider extends LaravelServiceProvider
 {
-    /**
-     * All of the container bindings that should be registered.
-     *
-     * @var array
-     */
-    public $bindings = [
-        ServerProvider::class => DigitalOceanServerProvider::class,
-    ];
-
     /**
      * Register any application services.
      *
@@ -31,14 +23,19 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function boot()
     {
+        $this->app->singleton(ApiKeyService::class, function ($app) {
+            return new ApiKeyService();
+        });
+
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\Command\CreateApiKey::class,
-                Console\Command\DeleteApiKey::class,
-                Console\Command\CreateScope::class,
+                Console\Command\GenerateApiKey::class,
+                Console\Command\DeactivateApiKey::class,
+                Console\Command\ActivateApiKey::class,
+                Console\Command\GenerateScope::class,
                 Console\Command\DeleteScope::class,
-                Console\Command\AddScopeToApiKey::class,
-                Console\Command\RemoveScopeFromApiKey::class,
+                Console\Command\AddScope::class,
+                Console\Command\RemoveScope::class,
                 Console\Command\PrintApiKey::class,
             ]);
         }

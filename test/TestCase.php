@@ -10,31 +10,11 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class TestCase extends OrchestraTestCase
 {
-    protected EntityManager $entityManager;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        return;
-
-        // Create a simple "default" Doctrine ORM configuration for Annotations
-        $isDevMode = true;
-        $config = Setup::createXMLMetadataConfiguration(array(__DIR__ . "/../config/orm"), $isDevMode);
-
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'memory' => true,
-        );
-
-        $this->entityManager = EntityManager::create($conn, $config);
-        $tool = new SchemaTool($this->entityManager);
-        $tool->createSchema($this->entityManager->getMetadataFactory()->getAllMetadata());
-    }
-
     protected function getPackageProviders($app)
     {
         return [
             \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
+            \ApiSkeletons\Laravel\Doctrine\ApiKey\ServiceProvider::class,
         ];
     }
 

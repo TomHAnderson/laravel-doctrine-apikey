@@ -3,13 +3,16 @@
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Repository;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Support\Str;
 
 class ApiKeyRepository extends EntityRepository
 {
-    public function create($name): ApiKey
+    public function generate($name): ApiKey
     {
         // Verify name is unique
         $apiKeys = $this->findBy([
@@ -17,7 +20,11 @@ class ApiKeyRepository extends EntityRepository
         ]);
 
         if ($apiKeys) {
-            throw new Exception('ApiKey with name "' . $name . '" already exists.');
+            throw new DuplicateName('An API key already exists with the name: ' . $name);
+        }
+
+        if (! $this->isValidName($name)) {
+            throw new InvalidName('Please provide a valid name: [a-z0-9-]');
         }
 
         do {
@@ -29,7 +36,8 @@ class ApiKeyRepository extends EntityRepository
             ->setName($name)
             ->setKey($key)
             ->setCreatedAt(new DateTime())
-            ->setIsDeleted(false)
+            ->setIsActive(true)
+            ->setStatusAt(new DateTime())
         ;
 
         $this->getEntityManager()->persist($apiKey);
@@ -37,17 +45,51 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
-    public function delete(ApiKey $apiKey): ApiKey
+    public function updateActive(ApiKey $apiKey, bool $status): ApiKey
     {
-        if ($apiKey->getDeletedAt() || $apiKey->getIsDeleted()) {
-            throw new Exception('ApiKey is already marked as deleted');
-        }
-
         $apiKey
-            ->setIsDeleted(true)
-            ->setDeletedAt(new DateTime())
+            ->setIsActive($status)
+            ->setStatusAt(new DateTime())
             ;
 
         return $apiKey;
+    }
+
+    public function addScope(ApiKey $apiKey, Scope $scope): ApiKey
+    {
+        // Do not add scopes twice
+        foreach ($apiKey->getScopes() as $s) {
+            if ($s === $scope) {
+                return $apiKey;
+            }
+        }
+
+        $apiKey->addScope($scope);
+        $scope->addApiKey($apiKey);
+
+        return $apiKey;
+    }
+
+    public function removeScope(ApiKey $apiKey, Scope $scope): ApiKey
+    {
+        $found = false;
+        foreach ($apiKey->getScopes() as $s) {
+            if ($s === $scope) {
+                $found = true;
+                break;
+            }
+        }
+
+        if ($found) {
+            $apiKey->removeScope($scope);
+            $scope->removeApiKey($apiKey);
+        }
+
+        return $apiKey;
+    }
+
+    public function isValidName($name): bool
+    {
+        return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
     }
 }

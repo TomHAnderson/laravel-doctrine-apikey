@@ -20,7 +20,7 @@ class ApiKey
     /**
      * @var bool
      */
-    private $is_deleted;
+    private $is_active;
 
     /**
      * @var \DateTime
@@ -28,9 +28,9 @@ class ApiKey
     private $created_at;
 
     /**
-     * @var \DateTime|null
+     * @var \DateTime
      */
-    private $deleted_at;
+    private $status_at;
 
     /**
      * @var int
@@ -111,27 +111,27 @@ class ApiKey
     }
 
     /**
-     * Set isDeleted.
+     * Set isActive.
      *
-     * @param bool $isDeleted
+     * @param bool $isActive
      *
      * @return ApiKey
      */
-    public function setIsDeleted($isDeleted)
+    public function setIsActive($isActive)
     {
-        $this->is_deleted = $isDeleted;
+        $this->is_active = $isActive;
 
         return $this;
     }
 
     /**
-     * Get isDeleted.
+     * Get isActive.
      *
      * @return bool
      */
-    public function getIsDeleted()
+    public function getIsActive()
     {
-        return $this->is_deleted;
+        return $this->is_active;
     }
 
     /**
@@ -159,27 +159,27 @@ class ApiKey
     }
 
     /**
-     * Set deletedAt.
+     * Set statusAt.
      *
-     * @param \DateTime|null $deletedAt
+     * @param \DateTime $statusAt
      *
      * @return ApiKey
      */
-    public function setDeletedAt($deletedAt = null)
+    public function setStatusAt($statusAt)
     {
-        $this->deleted_at = $deletedAt;
+        $this->status_at = $statusAt;
 
         return $this;
     }
 
     /**
-     * Get deletedAt.
+     * Get statusAt.
      *
-     * @return \DateTime|null
+     * @return \DateTime
      */
-    public function getDeletedAt()
+    public function getStatusAt()
     {
-        return $this->deleted_at;
+        return $this->status_at;
     }
 
     /**
@@ -195,11 +195,11 @@ class ApiKey
     /**
      * Add accessEvent.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent $accessEvent
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent $accessEvent
      *
      * @return ApiKey
      */
-    public function addAccessEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent $accessEvent)
+    public function addAccessEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent $accessEvent)
     {
         $this->accessEvents[] = $accessEvent;
 
@@ -209,11 +209,11 @@ class ApiKey
     /**
      * Remove accessEvent.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent $accessEvent
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent $accessEvent
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAccessEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\AccessEvent $accessEvent)
+    public function removeAccessEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AccessEvent $accessEvent)
     {
         return $this->accessEvents->removeElement($accessEvent);
     }
@@ -231,11 +231,11 @@ class ApiKey
     /**
      * Add adminEvent.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent $adminEvent
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent $adminEvent
      *
      * @return ApiKey
      */
-    public function addAdminEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent $adminEvent)
+    public function addAdminEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent $adminEvent)
     {
         $this->adminEvents[] = $adminEvent;
 
@@ -245,11 +245,11 @@ class ApiKey
     /**
      * Remove adminEvent.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent $adminEvent
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent $adminEvent
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAdminEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\AdminEvent $adminEvent)
+    public function removeAdminEvent(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\AdminEvent $adminEvent)
     {
         return $this->adminEvents->removeElement($adminEvent);
     }
@@ -267,11 +267,11 @@ class ApiKey
     /**
      * Add scope.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Scope $scope
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope $scope
      *
      * @return ApiKey
      */
-    public function addScope(\ApiSkeletons\Laravel\Doctrine\ApiKey\Scope $scope)
+    public function addScope(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope $scope)
     {
         $this->scopes[] = $scope;
 
@@ -281,11 +281,11 @@ class ApiKey
     /**
      * Remove scope.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Scope $scope
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope $scope
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeScope(\ApiSkeletons\Laravel\Doctrine\ApiKey\Scope $scope)
+    public function removeScope(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope $scope)
     {
         return $this->scopes->removeElement($scope);
     }

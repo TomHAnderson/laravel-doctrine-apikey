@@ -5,9 +5,9 @@
       <field name="id" type="bigint" required="true" unique="true" primary="true" auto-increment="true" uuid="1425ce9b-57d6-4c28-bd8b-89fffce92468"/>
       <field name="name" type="string" required="true" unique="true" uuid="a0ea0895-aab4-4c93-b119-47c9539e95a2"/>
       <field name="key" type="string" required="true" unique="true" uuid="e5a11137-9889-470a-8d5d-7ce1273d13df"/>
-      <field name="is_deleted" type="boolean" required="true" uuid="ba95511b-7e28-47b1-8cd1-eaa9a488dc96"/>
+      <field name="is_active" type="boolean" required="true" uuid="ba95511b-7e28-47b1-8cd1-eaa9a488dc96"/>
       <field name="created_at" type="datetime" required="true" uuid="d09a3c83-1bd8-45fe-8b2c-9c46b4319c30"/>
-      <field name="deleted_at" type="datetime" uuid="49072f5c-bbbd-4e04-85df-656eaffd9025"/>
+      <field name="status_at" type="datetime" required="true" uuid="49072f5c-bbbd-4e04-85df-656eaffd9025"/>
       <orm-attributes>
         <attribute name="table">api_keys</attribute>
         <attribute name="repository-class">ApiSkeletons\Laravel\Doctrine\ApiKey\Repository\ApiKeyRepository</attribute>

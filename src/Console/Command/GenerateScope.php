@@ -3,12 +3,13 @@
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
 
-final class PrintApiKey extends Command
+final class GenerateScope extends Command
 {
     private ApiKeyService $apiKeyService;
 
@@ -17,14 +18,14 @@ final class PrintApiKey extends Command
      *
      * @var string
      */
-    protected $signature = 'apikey:print {name}';
+    protected $signature = 'apikey:scope:generate {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Print an ApiKey';
+    protected $description = 'Generate a new ApiKey Scope';
 
     /**
      * Create a new command instance.
@@ -47,12 +48,22 @@ final class PrintApiKey extends Command
     {
         $name = $this->argument('name');
 
-        $apiKeyRepository = $this->apiKeyService->getEntityManager()
-            ->getRepository(ApiKey::class);
+        $scopeRepository = $this->apiKeyService->getEntityManager()
+            ->getRepository(Scope::class);
 
-        $apiKey = $apiKeyRepository->findOneBy([
-            'name' => $name,
-        ]);
+        try {
+            $scopeRepository->generate($name);
+        } catch (DuplicateName $e) {
+            $this->error($e->getMessage());
+
+            return 1;
+        } catch (InvalidName $e) {
+            $this->error($e->getMessage());
+
+            return 1;
+        }
+
+
 
         if (! $apiKey) {
             $this->error('Invalid apiKey name');

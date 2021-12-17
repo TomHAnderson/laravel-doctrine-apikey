@@ -8,7 +8,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Illuminate\Console\Command;
 
-final class PrintApiKey extends Command
+final class GenerateApiKey extends Command
 {
     private ApiKeyService $apiKeyService;
 
@@ -17,14 +17,14 @@ final class PrintApiKey extends Command
      *
      * @var string
      */
-    protected $signature = 'apikey:print {name}';
+    protected $signature = 'apikey:generate {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Print an ApiKey';
+    protected $description = 'Create a new ApiKey';
 
     /**
      * Create a new command instance.
@@ -50,15 +50,19 @@ final class PrintApiKey extends Command
         $apiKeyRepository = $this->apiKeyService->getEntityManager()
             ->getRepository(ApiKey::class);
 
-        $apiKey = $apiKeyRepository->findOneBy([
-            'name' => $name,
-        ]);
+        try {
+            $apiKey = $apiKeyRepository->generate($name);
+        } catch (InvalidName $e) {
+            $this->error($e->getMessage());
 
-        if (! $apiKey) {
-            $this->error('Invalid apiKey name');
+            return 1;
+        } catch (DuplicateName $e) {
+            $this->error($e->getMessage());
 
             return 1;
         }
+
+        $this->apiKeyService->getEntityManager()->flush();
 
         $headers = ['name', 'key', 'status'];
         $rows = [[$apiKey->getName(), $apiKey->getKey(), $apiKey->getIsActive() ? 'active': 'deactivated']];

@@ -96,11 +96,11 @@ class Scope
     /**
      * Add apiKey.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey
      *
      * @return Scope
      */
-    public function addApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey)
+    public function addApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey)
     {
         $this->apiKeys[] = $apiKey;
 
@@ -110,11 +110,11 @@ class Scope
     /**
      * Remove apiKey.
      *
-     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey
+     * @param \ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\ApiKey $apiKey)
+    public function removeApiKey(\ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey $apiKey)
     {
         return $this->apiKeys->removeElement($apiKey);
     }
