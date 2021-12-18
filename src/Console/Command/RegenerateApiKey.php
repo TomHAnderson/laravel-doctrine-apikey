@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Console\Command;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
-use Throwable;
 
 // phpcs:disable SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
 final class RegenerateApiKey extends Command
@@ -30,9 +29,9 @@ final class RegenerateApiKey extends Command
         $apiKeyRepository = $this->apiKeyService->getEntityManager()
             ->getRepository(ApiKey::class);
 
-        try {
-            $apiKey = $apiKeyRepository->findOneBy(['name' => $name]);
-        } catch (Throwable $e) {
+        $apiKey = $apiKeyRepository->findOneBy(['name' => $name]);
+
+        if (! $apiKey) {
             $this->error('ApiKey not found by name: ' . $name);
 
             return 1;
