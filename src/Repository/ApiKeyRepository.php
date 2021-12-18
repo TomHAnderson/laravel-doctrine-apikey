@@ -13,6 +13,7 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\DuplicateScopeForApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Exception\InvalidName;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\ORMException;
 use Illuminate\Support\Str;
 
 use function preg_match;
@@ -20,6 +21,13 @@ use function request;
 
 class ApiKeyRepository extends EntityRepository
 {
+    /**
+     * Create a new ApiKey entity
+     *
+     * @throws DuplicateName
+     * @throws InvalidName
+     * @throws ORMException
+     */
     public function generate(string $name): ApiKey
     {
         // Verify name is unique
@@ -33,9 +41,7 @@ class ApiKeyRepository extends EntityRepository
             throw new InvalidName('Please provide a valid name: [a-z0-9-]');
         }
 
-        do {
-            $key = Str::random(64);
-        } while ($this->findBy(['api_key' => $key]));
+        $key = $this->generateKey();
 
         $apiKey = new ApiKey();
         $apiKey
@@ -51,6 +57,31 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
+    /**
+     * Assign a new api_key to an existing ApiKey entity
+     */
+    public function regenerate(ApiKey $apiKey): ApiKey
+    {
+        $apiKey->setApiKey($this->generateKey());
+
+        return $apiKey;
+    }
+
+    /**
+     * Generate a unique api_key
+     */
+    protected function generateKey(): string
+    {
+        do {
+            $key = Str::random(64);
+        } while ($this->findBy(['api_key' => $key]));
+
+        return $key;
+    }
+
+    /**
+     * Change the active status of an ApiKey entity
+     */
     public function updateActive(ApiKey $apiKey, bool $status): ApiKey
     {
         $apiKey
@@ -63,6 +94,11 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
+    /**
+     * Add an existing scope to an existing ApiKey entity
+     *
+     * @throws DuplicateScopeForApiKey
+     */
     public function addScope(ApiKey $apiKey, Scope $scope): ApiKey
     {
         // Do not add scopes twice
@@ -80,6 +116,11 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
+    /**
+     * Remove a scope from an ApiKey
+     *
+     * @throws ApiKeyDoesNotHaveScope
+     */
     public function removeScope(ApiKey $apiKey, Scope $scope): ApiKey
     {
         $found = false;
@@ -104,11 +145,17 @@ class ApiKeyRepository extends EntityRepository
         return $apiKey;
     }
 
+    /**
+     * Validate an API key name
+     */
     public function isValidName(string $name): bool
     {
         return (bool) preg_match('/^[a-z0-9-]{1,255}$/', $name);
     }
 
+    /**
+     * Create a new entity for logging admin events whenever one is triggered
+     */
     protected function logAdminEvent(ApiKey $apiKey, string $eventName): AdminEvent
     {
         $adminEvent = (new AdminEvent())

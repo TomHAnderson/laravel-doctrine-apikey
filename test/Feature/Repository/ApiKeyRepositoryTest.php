@@ -36,6 +36,20 @@ final class ApiKeyRepositoryTest extends TestCase
         }
     }
 
+    public function testRegenerate(): void
+    {
+        $entityManager = $this->createDatabase(app('em'));
+        $repository = $entityManager->getRepository(ApiKey::class);
+
+        $apiKey = $repository->generate('testing');
+        $entityManager->flush();
+
+        $oldKey = $apiKey->getApiKey();
+        $apiKey = $repository->regenerate($apiKey);
+
+        $this->assertNotEquals($oldKey, $apiKey->getApiKey());
+    }
+
     public function testGenerateValidatesName(): void
     {
         $this->expectException(InvalidName::class);
