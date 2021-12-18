@@ -142,6 +142,11 @@ Unassign a Scope from an ApiKey
 php artisan apikey:scope:remove {apiKeyName} {scopeName}
 ```
 
+Regenerate an ApiKey (assign a new Bearer token)
+```shell
+php artisan apikey:regenerate {name}
+```
+
 Delete a Scope
 ```shell
 php artisan apikey:scope:delete {scopeName}

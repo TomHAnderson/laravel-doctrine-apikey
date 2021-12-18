@@ -35,6 +35,7 @@ class ServiceProvider extends LaravelServiceProvider
                 Console\Command\GenerateScope::class,
                 Console\Command\PrintApiKey::class,
                 Console\Command\PrintScope::class,
+                Console\Command\RegenerateApiKey::class,
                 Console\Command\RemoveScope::class,
             ]);
         }
