@@ -88,6 +88,18 @@ Route::name('api.resource::fetch')
 ```
 
 
+## Leveraging the ApiKey name as a foreign key
+
+It stands to reason that in many cases one API key will be issued for exactly one user.
+But to enforce referential integrity a join would be required at run time.  This is certainly
+possible, but it would complicate this repository.  So, it is recommended that if you need to 
+associate a user to an ApiKey you do so by naming the ApiKey the primary key of the user.
+You can then join the two entities using an `ON` statement.
+
+The ApiKey name column is unique and indexed and perfectly suited for this approach.
+
+
+
 ## Event Logging
 
 Admin events are logged when an ApiKey is generated, activated, deactivated, add a scope, and remove a scope.
