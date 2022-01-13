@@ -41,6 +41,7 @@ class AuthorizeApiKey
         if ($apiKey) {
             if (! $scope) {
                 $this->apiKeyService->logAccessEvent($request, $apiKey);
+                $request->attributes->set('apikey', $apiKey);
 
                 return $next($request);
             }
@@ -48,6 +49,7 @@ class AuthorizeApiKey
             // If a scope is passed then verify it exists for the key
             if ($this->apiKeyService->hasScope($key, $scope)) {
                 $this->apiKeyService->logAccessEvent($request, $apiKey);
+                $request->attributes->set('apikey', $apiKey);
 
                 return $next($request);
             }

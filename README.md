@@ -88,6 +88,16 @@ Route::name('api.resource::fetch')
 ```
 
 
+## Access to ApiKey through request attributes
+
+The ApiKey entity which authenticates a request is assigned to the request attributes as
+'apikey'.
+
+```php
+$apiKey = request()->attributes->get('apikey');
+```
+
+
 ## Leveraging the ApiKey name as a foreign key
 
 It stands to reason that in many cases one API key will be issued for exactly one user.

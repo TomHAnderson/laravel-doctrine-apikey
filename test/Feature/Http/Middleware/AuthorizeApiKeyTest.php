@@ -26,6 +26,7 @@ final class AuthorizeApiKeyTest extends TestCase
 
         $response = $middleware->handle($request, function() {});
         $this->assertNull($response);
+        $this->assertEquals($apiKey, $request->attributes->get('apikey'));
     }
 
     public function testApiKeyDoesNotAuthorizeRequest(): void
