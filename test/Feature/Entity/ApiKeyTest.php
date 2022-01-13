@@ -3,6 +3,7 @@
 namespace ApiSkeletonsTest\Laravel\Doctrine\ApiKey\Feature\Entity;
 
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\Scope;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware\AuthorizeApiKey;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use ApiSkeletonsTest\Laravel\Doctrine\ApiKey\TestCase;
@@ -59,5 +60,22 @@ final class ApiKeyTest extends TestCase
         }
 
         $this->assertEquals(0, count($apiKey->getAccessEvents()));
+    }
+
+    public function testHasScope(): void
+    {
+        $entityManager = $this->createDatabase(app('em'));
+        $apiKeyRepository = $entityManager->getRepository(ApiKey::class);
+        $scopeRepository = $entityManager->getRepository(Scope::class);
+
+        $apiKey = $apiKeyRepository->generate('testing');
+        $scope = $scopeRepository->generate('scopetest');
+        $entityManager->flush();
+
+        $apiKeyRepository->addScope($apiKey, $scope);
+        $entityManager->flush();
+
+        $this->assertTrue($apiKey->hasScope('scopetest'));
+        $this->assertFalse($apiKey->hasScope('fail'));
     }
 }
