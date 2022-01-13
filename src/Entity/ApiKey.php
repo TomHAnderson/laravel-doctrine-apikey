@@ -63,6 +63,21 @@ class ApiKey
     }
 
     /**
+     * A convenience function to check if a scope is assigned to the apikey
+     * by name
+     */
+    public function hasScope(string $scopeName): bool
+    {
+        foreach ($this->getScopes() as $scope) {
+            if ($scope->getName() === $scopeName) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Set name.
      *
      * @param string $name
