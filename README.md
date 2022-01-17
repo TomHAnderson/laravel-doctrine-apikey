@@ -98,16 +98,60 @@ $apiKey = request()->attributes->get('apikey');
 ```
 
 
-## Leveraging the ApiKey name as a foreign key
+## Using foreign keys to ApiKey
 
-It stands to reason that in many cases one API key will be issued for exactly one user.
-But to enforce referential integrity a join would be required at run time.  This is certainly
-possible, but it would complicate this repository.  So, it is recommended that if you need to 
-associate a user to an ApiKey you do so by naming the ApiKey the primary key of the user.
-You can then join the two entities using an `ON` statement.
+Because an ApiKey can be regenerated, there may be no reason to assign multiple
+API keys to the same entity.  For instance, if each Customer has a 1:1 with ApiKey
+then you can safely disable that key, regenerate it, and so on; never needing to 
+assign a new ApiKey.  
 
-The ApiKey name column is unique and indexed and perfectly suited for this approach.
+To dynamically create a 1:1 relationship between a Customer entity and API key, 
+create an event subscriber:
 
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\ORM\Event\Subscriber;
+
+use ApiSkeletons\Laravel\Doctrine\ApiKey\Entity\ApiKey;
+use App\ORM\Entity\Customer;
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Events;
+
+class ApiKeyEventSubscriber implements
+    EventSubscriber
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function getSubscribedEvents()
+    {
+        return [
+            Events::loadClassMetadata,
+        ];
+    }
+
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
+    {
+        // the $metadata is the whole mapping info for this class
+        $metadata = $eventArgs->getClassMetadata();
+
+        switch ($metadata->getName()) {
+            case Customer::class:
+                $metadata->mapOneToOne([
+                    'targetEntity' => ApiKey::class,
+                    'fieldName' => 'apiKey',
+                ]);
+                break;
+            default:
+                break;
+        }
+    }
+}
+```
 
 
 ## Event Logging
