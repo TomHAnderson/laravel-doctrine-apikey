@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ApiSkeletons\Laravel\Doctrine\ApiKey\Http\Middleware;
 
+use ApiSkeletons\Laravel\ApiProblem\Facades\ApiProblem;
 use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Closure;
 use Illuminate\Http\Request;
@@ -26,15 +27,11 @@ class AuthorizeApiKey
     public function handle(Request $request, Closure $next, ?string $scope = null): mixed
     {
         $header = $request->header('Authorization');
-        // Remove Bearer from key prefix
         if (! $header) {
-            return response([
-                'errors' => [
-                    ['message' => 'Unauthorized'],
-                ],
-            ], 401);
+            return ApiProblem::response('Missing the Authorization header', 401);
         }
 
+        // Remove Bearer from key prefix
         $key = substr($header, 7);
 
         $apiKey = $this->apiKeyService->isActive($key);
@@ -55,10 +52,6 @@ class AuthorizeApiKey
             }
         }
 
-        return response([
-            'errors' => [
-                ['message' => 'Unauthorized'],
-            ],
-        ], 401);
+        return ApiProblem::response('Invalid ApiKey', 401);
     }
 }

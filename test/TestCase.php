@@ -15,6 +15,7 @@ abstract class TestCase extends OrchestraTestCase
         return [
             \LaravelDoctrine\ORM\DoctrineServiceProvider::class,
             \ApiSkeletons\Laravel\Doctrine\ApiKey\ServiceProvider::class,
+            \ApiSkeletons\Laravel\ApiProblem\ServiceProvider::class,
         ];
     }
 
