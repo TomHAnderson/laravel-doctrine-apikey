@@ -9,7 +9,6 @@ use ApiSkeletons\Laravel\Doctrine\ApiKey\Service\ApiKeyService;
 use Closure;
 use Illuminate\Http\Request;
 
-use function response;
 use function substr;
 
 class AuthorizeApiKey
