@@ -21,7 +21,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "laravel-doctrine/orm": "^1.6"
+        "laravel-doctrine/orm": "^1.6",
+        "api-skeletons/laravel-api-problem": "^1.0.1"
     },
     "require-dev": {
         "doctrine/coding-standard": "^9.0",
